@@ -1,0 +1,140 @@
+A model should represent processes that can be made on an image
+A model will have an image field. A model will have a name field (the images name that is determined
+ by the user)
+The methods will mutate that field accordingly
+Or methods will take in the field and return a new image
+
+
+***************************** General Notes *****************************
+- Common Gray Scaling Practices: Local Thresholding, global. We can do gray scaling based on luma,
+intensity, or value (choose one).
+
+
+
+***************************** Questions *****************************:
+- Do we need to actually create the images? *answer* most likely a yes
+- How does gray scaling work? Does it work the same way? *answer* it seems that the gray scaling
+operation is the same but there are just different methods you can do to gray scale.
+
+- How do you visualize intensity or luma? Isn't visualizing value the same as createVisualization()?
+
+- Will we ALWAYS have an 8 bit image? (for now assume no)
+
+- Do we handle file saving in the model, view, or the controller. *answer* seems like the view will
+have an image and save it
+
+
+***************************** Methods we need *****************************:
+
+- createColoVisualization(Color color, Color visualization)
+    Description: Return a gray scaled image (using value) after choosing one of "blue", "red", or
+    "green" to visualize.
+
+    Example: we have an RGB of (200, 230, 140). if we wanted to visualize green we'd gray scale our
+    image around the green value of 140.
+
+    Drafting:
+     - take in a string, have a switch case for "blue", "red", "green". Might want to make a
+       private helper later to reduce code duplication between blue, red, and green.
+     - Two switch cases: one if it's value, intensity, or luma. one if it's "red", "green", "blue"
+     - Switch case: value, intensity, luma
+        - for value you can choose red, green, or blue, then set all of them (only one where you
+        choose a channel)
+
+- createRepresentation(Enum type)
+    Description: gray scales based on value, intensity, or luma
+
+    Examples:
+     -Value: we have a pixel with an RGB of (200, 230, 140). That pixel's RGB values would change to
+     (230, 230, 230). We do this for all pixels. If we had another pixel in the same image that is
+     (100, 30, 20) the new RGB for that pixel would be (100, 100, 100).
+     -Intensity: each pixel calculates its own intensity value then sets every RGB to that value
+     -Luma: each pixel calculates its own luma then sets R, G, and B to that value
+
+
+    Drafting:
+    - for value createVisualization() will likely be used. *REJECTED
+    - for intensity we set the RGB values to the intensity in order to visualize it
+    - for LUMA we set the RGB values to that calculation
+
+- flip(Enum flip)
+    Description: flips an image
+
+- adjustLight(int value)
+    Description: Adjusts the light of an image. Darkening: subtracting a positive constant and
+    clamping to zero (cannot be below zero). Brightening would be adding a positive constant to
+    each value of a pixel's RGB while being capped at 255 if it is an 8 bit image.
+
+    Throws an illegal argument exception if the value is less than -255 or greater than 255. This
+    way we can just have one argument that will determine if the image is being darkened or
+    brightened (and the intensity)
+
+    Example: if we have a pixel (254, 100, 100) brightening max -> (255, 101, 101)
+
+- saveFile(Path path)
+    Description: saves the current image field as a file
+
+
+***************************** What We Want to Do *****************************
+
+DONE
+*** Controller based, in our constructor the model will have a field
+Load an image from an ASCII PPM file
+# (Controller / Model) : model takes in an image while the controller provides it
+
+DONE
+Create images that visualize individual R,G,B components of an image.
+# (Model gets RGB components, the view will take that data and visualize it)
+
+DONE
+Create images that visualize the value, intensity, or luma of an image as defined above.
+# (Model, visualization is View)
+
+DONE
+Flip an image horizontally or vertically.
+# (Model)
+
+DONE
+Brighten or darken an image.
+# (Model)
+
+NEEDS MORE CONSIDERATION
+Save an image to an ASCII PPM file (see below).
+???  #(Probably model/Probably View)
+
+DONE
+Allow a user to interact with your program to use these operations, using simple text-based
+scripting (see below).
+# (Controller)
+
+
+
+
+*********************** Specifics *****************************
+- load image-path image-name: Load an image from the specified path and refer it to henceforth in
+the program by the given image name.
+# Controller passes it to the model. The model's constructor is called and the String field and image
+ field are initialized
+
+- save image-path image-name: Save the image with the given name to the specified path which should
+ include the name of the file.
+# Model calls saveFile() method
+
+- red-component image-name dest-image-name: Create a greyscale image with the red-component of the
+image with the given name, and refer to it henceforth in the program by the given destination name.
+Similar commands for green, blue, value, luma, intensity components should be supported.
+# Model calls createColorVisualization() for red, green blue, and for value, luma, intensity
+createRepresentation() is called
+
+- horizontal-flip image-name dest-image-name: Flip an image horizontally to create a new image,
+referred to henceforth by the given destination name.
+# Model calls flip() method
+
+- vertical-flip image-name dest-image-name: Flip an image vertically to create a new image, referred
+ to henceforth by the given destination name.
+# Model calls flip() method
+
+- brighten increment image-name dest-image-name: brighten the image by the given increment to create
+ a new image, referred to henceforth by the given destination name. The increment may be positive
+ (brightening) or negative (darkening)
+ # Model calls adjustLight()
