@@ -1,2 +1,7 @@
-package ImageProcessing.model;public enum FlipType {
+package ImageProcessing.model;
+
+public enum FlipType {
+
+  Horizontal,
+  Vertical
 }

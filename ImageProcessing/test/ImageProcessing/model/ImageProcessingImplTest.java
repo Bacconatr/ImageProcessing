@@ -1,4 +1,7 @@
-import static org.junit.Assert.*;
+package ImageProcessing.model;
+
 public class ImageProcessingImplTest {
-  
+
+
+
 }
