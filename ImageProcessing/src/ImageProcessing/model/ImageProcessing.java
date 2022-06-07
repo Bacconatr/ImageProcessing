@@ -1,3 +1,5 @@
+package ImageProcessing.model;
+
 /**
  *
  */
