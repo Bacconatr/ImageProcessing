@@ -12,6 +12,15 @@ intensity, or value (choose one).
 
 
 ***************************** Questions *****************************:
+
+Questions 6.7.22
+- For createRepresentation is this okay design or could we try to implement the commandDesign
+  pattern?
+
+
+
+
+
 - Do we need to actually create the images? *answer* most likely a yes
 - How does gray scaling work? Does it work the same way? *answer* it seems that the gray scaling
 operation is the same but there are just different methods you can do to gray scale.

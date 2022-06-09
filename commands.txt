@@ -1,0 +1,18 @@
+
+
+############### adjusting light ###############
+load Koala.ppm koala brighten 10 koala koala-brighten save C:\Intellij_Projects\OOD\Homeworks\group\ImageProcessing\koalaTest.ppm koala-brighten q
+load Koala.ppm koala darken 50 koala koala-darken save C:\Intellij_Projects\OOD\Homeworks\group\ImageProcessing\koala-darken.ppm koala-darken q
+
+############### grey scaling ###############
+load Koala.ppm koala red-component koala koala-red-greyscale save C:\Intellij_Projects\OOD\Homeworks\group\ImageProcessing\koala-red-greyscale.ppm koala-red-greyscale q
+load Koala.ppm koala value-component koala koala-value-greyscale save C:\Intellij_Projects\OOD\Homeworks\group\ImageProcessing\koala-value-greyscale.ppm koala-value-greyscale q
+
+############### flipping ###############
+load Koala.ppm koala horizontal-flip koala koala-horizontal-flip save C:\Intellij_Projects\OOD\Homeworks\group\ImageProcessing\koala-horizontal-flip.ppm koala-horizontal-flip q
+load Koala.ppm koala vertical-flip koala koala-vertical-flip save C:\Intellij_Projects\OOD\Homeworks\group\ImageProcessing\koala-vertical-flip.ppm koala-vertical-flip q
+
+
+
+############### multiple commands ###############
+load Koala.ppm koala darken 50 koala koala-multiple horizontal-flip koala-multiple koala-multiple vertical-flip koala-multiple koala-multiple save C:\Intellij_Projects\OOD\Homeworks\group\ImageProcessing\koala-multiple.ppm koala-multiple q

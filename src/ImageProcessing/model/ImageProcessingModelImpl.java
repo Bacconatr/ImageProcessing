@@ -6,11 +6,18 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-
-public class ImageProcessingImpl implements ImageProcessing {
-
+/**
+ *
+ */
+public class ImageProcessingModelImpl implements ImageProcessingModel {
   private HashMap<String, Pixel[][]> mapOfImages;
 
+  /**
+   * Constructs an ImageProcessingModelImpl.
+   */
+  public ImageProcessingModelImpl() {
+    mapOfImages = new HashMap<String, Pixel[][]>();
+  }
 
   @Override
   public void createRepresentation(VisualizationType type, String filename) {
@@ -26,8 +33,10 @@ public class ImageProcessingImpl implements ImageProcessing {
   @Override
   public void adjustLight(int value, String filename) throws IllegalArgumentException {
 
-    Pixel[][] image = mapOfImages.getOrDefault(filename, null);
-    if (image == null ) {
+    Pixel[][] image = mapOfImages.getOrDefault(filename, null).clone();
+
+
+    if (image == null) {
       throw new IllegalArgumentException("Didn't provide the name of an existing images.");
     }
 
@@ -61,16 +70,16 @@ public class ImageProcessingImpl implements ImageProcessing {
   }
 
   @Override
-  public void readPPM(String filename) {
+  public void readPPM(String filePath, String fileName) {
 
     // Code originally provided in ImageUtil, but we have changed to fit our program.
 
     Scanner sc;
 
     try {
-      sc = new Scanner(new FileInputStream(filename));
+      sc = new Scanner(new FileInputStream(filePath));
     } catch (FileNotFoundException e) {
-      //  System.out.println("File " + filename + " not found!");
+      //  System.out.println("File " + filePath + " not found!");
       return;
     }
     StringBuilder builder = new StringBuilder();
@@ -111,10 +120,48 @@ public class ImageProcessingImpl implements ImageProcessing {
 
         //  System.out.println("Color of pixel (" + j + "," + i + "): " + r + "," + g + "," + b);
 
-        mapOfImages.put(filename, listOfPixels);
+        mapOfImages.put(fileName, listOfPixels);
       }
     }
   }
 
+  public void savePPM(String filePath, String fileName) throws IllegalArgumentException {
+
+    Pixel[][] fileToSave = mapOfImages.getOrDefault(fileName, null);
+    if (fileToSave == null) {
+      throw new IllegalArgumentException("sorry their is no file with given file name");
+    } else {
+      File file = new File(filePath);
+      try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write("P3");
+        writer.newLine();
+        writer.write(String.valueOf(fileToSave[0].length) + " " +
+                String.valueOf(fileToSave.length));
+        writer.newLine();
+        writer.write(String.valueOf(255));
+        writer.newLine();
+        for (int i = 0; i < fileToSave.length; i++) {
+          for (int j = 0; j < fileToSave[0].length; j++) {
+            writer.write(String.valueOf(fileToSave[i][j].getRed()));
+            writer.newLine();
+            writer.write(String.valueOf(fileToSave[i][j].getGreen()));
+            writer.newLine();
+            writer.write(String.valueOf(fileToSave[i][j].getBlue()));
+            writer.newLine();
+          }
+        }
+
+        writer.close();
+
+      } catch (IOException e) {
+
+        throw new IllegalArgumentException("sorry there was an error with the saving the file");
+      }
+
+    }
+
+
+  }
 
 }
