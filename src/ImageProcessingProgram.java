@@ -1,11 +1,11 @@
 import java.io.InputStreamReader;
 
-import ImageProcessing.controller.IProcessingImageController;
-import ImageProcessing.controller.ImageController;
-import ImageProcessing.model.ImageProcessingModel;
-import ImageProcessing.model.ImageProcessingModelImpl;
-import ImageProcessing.view.BasicImageProcessingView;
-import ImageProcessing.view.IProcessingImageView;
+import imageprocessing.controller.IProcessingImageController;
+import imageprocessing.controller.ImageController;
+import imageprocessing.model.ImageProcessingModel;
+import imageprocessing.model.ImageProcessingModelImpl;
+import imageprocessing.view.BasicImageProcessingView;
+import imageprocessing.view.IProcessingImageView;
 
 /**
  * The object that contains the method to run the image processing program.

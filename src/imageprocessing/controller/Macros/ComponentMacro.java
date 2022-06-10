@@ -1,10 +1,10 @@
-package ImageProcessing.controller.Macros;
+package imageprocessing.controller.Macros;
 
 import java.util.function.BiFunction;
 
-import ImageProcessing.model.ImageProcessingModel;
-import ImageProcessing.model.Pixel;
-import ImageProcessing.model.Posn;
+import imageprocessing.model.ImageProcessingModel;
+import imageprocessing.model.Pixel;
+import imageprocessing.model.Posn;
 
 /**
  * Represents an AbstractComponentMacro that will perform a process on a file of the given name. The

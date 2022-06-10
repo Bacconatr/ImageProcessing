@@ -1,7 +1,7 @@
-package ImageProcessing.controller.Macros;
+package imageprocessing.controller.Macros;
 
-import ImageProcessing.model.FlipType;
-import ImageProcessing.model.ImageProcessingModel;
+import imageprocessing.model.FlipType;
+import imageprocessing.model.ImageProcessingModel;
 
 /**
  *

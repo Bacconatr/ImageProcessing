@@ -1,16 +1,16 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import ImageProcessing.model.ComponentBiFunctions.BlueBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.GreenBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.IntensityBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.LumaBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.RedBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.ValueBiFunction;
-import ImageProcessing.model.FlipType;
-import ImageProcessing.model.ImageProcessingModel;
-import ImageProcessing.model.ImageProcessingModelImpl;
-import ImageProcessing.model.Pixel;
+import imageprocessing.model.ComponentBiFunctions.BlueBiFunction;
+import imageprocessing.model.ComponentBiFunctions.GreenBiFunction;
+import imageprocessing.model.ComponentBiFunctions.IntensityBiFunction;
+import imageprocessing.model.ComponentBiFunctions.LumaBiFunction;
+import imageprocessing.model.ComponentBiFunctions.RedBiFunction;
+import imageprocessing.model.ComponentBiFunctions.ValueBiFunction;
+import imageprocessing.model.FlipType;
+import imageprocessing.model.ImageProcessingModel;
+import imageprocessing.model.ImageProcessingModelImpl;
+import imageprocessing.model.Pixel;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -47,13 +47,20 @@ public class ImageProcessingImplTest {
 
   @Test
   public void testImageState() {
+    // tests that calling the imageState on a non-existing image in the model throws an error
     try {
       model.imageState("2x2-red-greyscale");
       fail("Did not input a non-existing image name");
     } catch (IllegalArgumentException e) {
       assertEquals(e.getMessage(), "The specified image does not exist.");
     }
-    assertArrayEquals(model.imageState("2x2"), checkImage);
+    // checks that the imageState returned is correct
+    assertArrayEquals(checkImage, model.imageState("2x2"));
+  }
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testRedInvalidInput() {
+    model.createRepresentation("does not exist", "will not load", new RedBiFunction());
   }
 
   @Test
@@ -66,6 +73,11 @@ public class ImageProcessingImplTest {
     assertArrayEquals(model.imageState("2x2-red-greyscale"), checkImage);
   }
 
+  @Test (expected = IllegalArgumentException.class)
+  public void testBlueInvalidInput() {
+    model.createRepresentation("does not exist", "will not load", new BlueBiFunction());
+  }
+
   @Test
   public void testCreateRepresentationBlue() {
     model.createRepresentation("2x2", "2x2-blue-greyscale", new BlueBiFunction());
@@ -74,6 +86,12 @@ public class ImageProcessingImplTest {
     checkImage[1][0] = new Pixel(255, 255, 255);
     checkImage[1][1] = new Pixel(100, 100, 100);
     assertArrayEquals(model.imageState("2x2-blue-greyscale"), checkImage);
+  }
+
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testGreenInvalidInput() {
+    model.createRepresentation("does not exist", "will not load", new GreenBiFunction());
   }
 
   @Test
@@ -86,6 +104,12 @@ public class ImageProcessingImplTest {
     assertArrayEquals(model.imageState("2x2-green-greyscale"), checkImage);
   }
 
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testValueInvalidInput() {
+    model.createRepresentation("does not exist", "will not load", new ValueBiFunction());
+  }
+
   @Test
   public void testCreateRepresentationValue() {
     model.createRepresentation("2x2", "2x2-value-greyscale", new ValueBiFunction());
@@ -96,6 +120,12 @@ public class ImageProcessingImplTest {
     assertArrayEquals(model.imageState("2x2-value-greyscale"), checkImage);
   }
 
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testLumaInvalidInput() {
+    model.createRepresentation("does not exist", "will not load", new LumaBiFunction());
+  }
+
   @Test
   public void testCreateRepresentationLuma() {
     model.createRepresentation("2x2", "2x2-luma-greyscale", new LumaBiFunction());
@@ -104,6 +134,12 @@ public class ImageProcessingImplTest {
     checkImage[1][0] = new Pixel(18, 18, 18);
     checkImage[1][1] = new Pixel(131, 131, 131);
     assertArrayEquals(model.imageState("2x2-luma-greyscale"), checkImage);
+  }
+
+
+  @Test (expected = IllegalArgumentException.class)
+  public void testIntensityInvalidInput() {
+    model.createRepresentation("does not exist", "will not load", new IntensityBiFunction());
   }
 
   @Test
@@ -188,10 +224,21 @@ public class ImageProcessingImplTest {
     model.adjustLight(-10, "iloveood", "2x2-brighten");
   }
 
-
   @Test
-  public void testSavePPM() {
-
+  public void testReadPPMInvalidPath() {
+    try {
+      model.readPPM("res/invalidDirectory/2by2.ppm", "should not exist");
+      fail("the file path did exist");
+    } catch (IllegalArgumentException e) {
+      // the file path did not exist and an error was thrown appropriately
+    }
+    // an additional check to ensure that an invalid ppm file was not loaded as an image
+    try {
+      model.imageState("should not exist");
+      fail("the image was loaded when it shouldn't have");
+    } catch (IllegalArgumentException e) {
+      // the image was not loaded
+    }
   }
 
   @Test
@@ -216,5 +263,32 @@ public class ImageProcessingImplTest {
     expected[2][1] = new Pixel(230, 20, 70);
     expected[2][2] = new Pixel(94, 232, 255);
     assertArrayEquals(expected, model.imageState("9pixel"));
+  }
+
+  @Test
+  public void testSavePPM() {
+    // checks that if the file path doesn't exist an error is thrown
+    try {
+      model.savePPM("res/res/fail.ppm", "2x2");
+      fail("the file path actually existed");
+    } catch (IllegalArgumentException e) {
+      assertEquals(e.getMessage(), "Error, the file path provided does not exist.");
+    }
+
+    // checks that if the image name does not exist in the model an error is thrown
+    try {
+      model.savePPM("res/save.ppm", "non-existent image");
+      fail("the image actually existed");
+    } catch (IllegalArgumentException e) {
+      assertEquals(e.getMessage(), "The image you are trying to save does not exist.");
+    }
+
+    // saves to the saveTester.ppm file with a currently existing image within the model
+    // (this will overwrite any previous file that was created when running this test)
+    model.savePPM("res/saveTester.ppm", "2x2");
+    // load the newly saved file into the model and check that it is the same value as the 2x2 image
+    model.readPPM("res/saveTester.ppm", "fileSaveSuccessful");
+    assertArrayEquals(checkImage, model.imageState("fileSaveSuccessful"));
+
   }
 }

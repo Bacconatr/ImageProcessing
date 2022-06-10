@@ -1,4 +1,4 @@
-package ImageProcessing.view;
+package imageprocessing.view;
 
 /**
  *

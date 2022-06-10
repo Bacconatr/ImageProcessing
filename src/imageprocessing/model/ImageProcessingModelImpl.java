@@ -1,8 +1,12 @@
-package ImageProcessing.model;
+package imageprocessing.model;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.function.BiFunction;
@@ -36,23 +40,66 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
 
 
   @Override
-  public void createRepresentation(VisualizationType type, String filename) {
-
+  public void createRepresentation(String imageName, String newImageName,
+                                   BiFunction<Posn, Pixel[][], Pixel> representation) {
+    Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
+    if (image == null) {
+      throw new IllegalArgumentException("The file for this component grey-scaling was not found.");
+    }
+    for (int i = 0; i < image.length; i++) {
+      for (int j = 0; j < image[0].length; j++) {
+        image[i][j] = representation.apply(new Posn(i, j), image);
+      }
+    }
+    mapOfImages.put(newImageName, image);
 
   }
 
   @Override
-  public void flip(FlipType flip, String filename) {
-
-  }
-
-  @Override
-  public void adjustLight(int value, String filename) throws IllegalArgumentException {
-
-    Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(filename, null));
+  public void flip(FlipType flip, String imageName, String newImageName) {
+    Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
 
     if (image == null) {
-      throw new IllegalArgumentException("Didn't provide the name of an existing images.");
+      throw new IllegalArgumentException("sorry the file you are trying to flip does not exist");
+    }
+    switch (flip) {
+      // vertical flip
+      case Vertical:
+        for (int i = 0; i < image.length / 2; i++) {
+          for (int j = 0; j < image[i].length; j++) {
+            Pixel temp = image[i][j];
+            image[i][j] = image[image.length - 1 - i][j];
+            image[image.length - 1 - i][j] = temp;
+          }
+        }
+        break;
+
+      // horizontal flip
+      case Horizontal:
+        for (int i = 0; i < image.length; i++) {
+          for (int j = 0; j < image[i].length / 2; j++) {
+            Pixel temp = image[i][j];
+            image[i][j] = image[i][image[0].length - 1 - j];
+            image[i][image[0].length - 1 - j] = temp;
+          }
+        }
+        break;
+      default:
+        throw new IllegalArgumentException("Must be a valid flip type");
+    }
+
+    this.mapOfImages.put(newImageName, image);
+
+  }
+
+  @Override
+  public void adjustLight(int value, String imageName, String newImageName)
+          throws IllegalArgumentException {
+
+    Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
+
+    if (image == null) {
+      throw new IllegalArgumentException("Didn't provide the name of an existing image.");
     }
 
     for (int i = 0; i < image.length; i++) {
@@ -77,15 +124,16 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
         } else if (tempBlue <= 0) {
           tempBlue = 0;
         }
+
         image[i][j] = new Pixel(tempRed, tempGreen, tempBlue);
       }
     }
-
+    this.mapOfImages.put(newImageName, image);
 
   }
 
   @Override
-  public void readPPM(String filePath, String fileName) {
+  public void readPPM(String filePath, String imageName) {
 
     // Code originally provided in ImageUtil, but we have changed to fit our program.
 
@@ -95,7 +143,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
       sc = new Scanner(new FileInputStream(filePath));
     } catch (FileNotFoundException e) {
       //  System.out.println("File " + filePath + " not found!");
-      return;
+      throw new IllegalArgumentException("sorry file not found");
     }
     StringBuilder builder = new StringBuilder();
     //read the file line by line, and populate a string. This will throw away any comment lines
@@ -133,14 +181,14 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
         listOfPixels[i][j] = new Pixel(r, g, b);
       }
     }
-    mapOfImages.put(fileName, listOfPixels);
+    mapOfImages.put(imageName, listOfPixels);
   }
 
-  public void savePPM(String filePath, String fileName) throws IllegalArgumentException {
+  public void savePPM(String filePath, String imageName) throws IllegalArgumentException {
 
-    Pixel[][] fileToSave = mapOfImages.getOrDefault(fileName, null);
+    Pixel[][] fileToSave = mapOfImages.getOrDefault(imageName, null);
     if (fileToSave == null) {
-      throw new IllegalArgumentException("sorry their is no file with given file name");
+      throw new IllegalArgumentException("The image you are trying to save does not exist.");
     } else {
       File file = new File(filePath);
       try {
@@ -166,8 +214,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
         writer.close();
 
       } catch (IOException e) {
-
-        throw new IllegalArgumentException("sorry there was an error with the saving the file");
+        throw new IllegalArgumentException("Error, the file path provided does not exist.");
       }
 
     }

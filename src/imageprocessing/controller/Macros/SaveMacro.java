@@ -1,6 +1,6 @@
-package ImageProcessing.controller.Macros;
+package imageprocessing.controller.Macros;
 
-import ImageProcessing.model.ImageProcessingModel;
+import imageprocessing.model.ImageProcessingModel;
 
 /**
  *

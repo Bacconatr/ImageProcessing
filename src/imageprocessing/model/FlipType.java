@@ -1,4 +1,4 @@
-package ImageProcessing.model;
+package imageprocessing.model;
 
 /**
  * Represents a flip type. A fip can either be a horizontal flip or a vertical flip.

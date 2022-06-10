@@ -1,32 +1,27 @@
-package ImageProcessing.controller;
+package imageprocessing.controller;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Function;
 
-import ImageProcessing.controller.Macros.AdjustLightMacro;
-import ImageProcessing.controller.Macros.ComponentMacro;
-import ImageProcessing.controller.Macros.FlipMacro;
-import ImageProcessing.controller.Macros.ImageProcessingMacro;
-import ImageProcessing.controller.Macros.LoadMacro;
-import ImageProcessing.controller.Macros.SaveMacro;
-import ImageProcessing.model.ComponentBiFunctions.BlueBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.GreenBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.IntensityBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.LumaBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.RedBiFunction;
-import ImageProcessing.model.ComponentBiFunctions.ValueBiFunction;
-import ImageProcessing.model.FlipType;
-import ImageProcessing.model.ImageProcessingModel;
-import ImageProcessing.view.IProcessingImageView;
+import imageprocessing.controller.Macros.AdjustLightMacro;
+import imageprocessing.controller.Macros.ComponentMacro;
+import imageprocessing.controller.Macros.FlipMacro;
+import imageprocessing.controller.Macros.ImageProcessingMacro;
+import imageprocessing.controller.Macros.LoadMacro;
+import imageprocessing.controller.Macros.SaveMacro;
+import imageprocessing.model.ComponentBiFunctions.BlueBiFunction;
+import imageprocessing.model.ComponentBiFunctions.GreenBiFunction;
+import imageprocessing.model.ComponentBiFunctions.IntensityBiFunction;
+import imageprocessing.model.ComponentBiFunctions.LumaBiFunction;
+import imageprocessing.model.ComponentBiFunctions.RedBiFunction;
+import imageprocessing.model.ComponentBiFunctions.ValueBiFunction;
+import imageprocessing.model.FlipType;
+import imageprocessing.model.ImageProcessingModel;
+import imageprocessing.view.IProcessingImageView;
 
 /**
  * Represents a basic controller that allows a user to load in an image and type in commands to
@@ -49,6 +44,10 @@ public class ImageController implements IProcessingImageController {
    * @param ap    what the view will append to when called on.
    */
   public ImageController(ImageProcessingModel model, IProcessingImageView view, Readable ap) {
+    if (model == null || view == null || ap == null) {
+      throw new IllegalArgumentException("Cannot have null arguments");
+    }
+
     this.model = model;
     this.view = view;
     this.readable = ap;
@@ -90,12 +89,11 @@ public class ImageController implements IProcessingImageController {
    */
   public void startProcessing() throws IllegalStateException {
     Scanner sc = new Scanner(this.readable);
-
     boolean quit = false;
+    String userInput = "";
     while (!quit) {
-      String userInput;
       try {
-        userInput = sc.next().toLowerCase();
+        userInput = sc.next();
       } catch (NoSuchElementException e) {
         throw new IllegalStateException("Need additional inputs.");
       }
@@ -106,14 +104,40 @@ public class ImageController implements IProcessingImageController {
         Function<Scanner, ImageProcessingMacro> cmd =
                 imageProcessingCommands.getOrDefault(userInput, null);
         if (cmd == null) {
-          view.renderMessage("This command was not valid. Please try again.\n");
+          view.renderMessage("The command specified was not valid. Please try again.\n");
           continue;
         }
-        ImageProcessingMacro macro = cmd.apply(sc);
-        macro.executeProcessingMacro(model);
+        ImageProcessingMacro macro;
+        try {
+          macro = cmd.apply(sc);
+        } catch (InputMismatchException e) {
+          view.renderMessage("The input type was incorrect.\n");
+          // THIS IS A DESIGN CHOICE
+          // without sc.nextLine() here the incorrect argument is processed as a command.
+          // we do not want this behavior so the input is removed from the scanner
+          // if a command provided has illegal arguments or too many arguments
+          sc.nextLine();
+          continue;
+        }
+        try {
+          macro.executeProcessingMacro(model);
+          view.renderMessage("Command successful.\n");
+        } catch (IllegalArgumentException e) {
+          view.renderMessage("The arguments for the command were not valid. " + e.getMessage() +
+                  "\n");
+          // THIS IS A DESIGN CHOICE.
+          // We implemented this so that the user will have to press enter (add a new line) in
+          // order to move on to the next command. If the arguments of a command are invalid then
+          // we want the user to start on a new line instead of linking multiple commands after.
+
+          // It is okay if a user links multiple *valid* commands, but with regard to errors we
+          // want them to start fresh on a new line.
+          sc.nextLine();
+        }
       }
     }
   }
 }
 
-
+//  load res/Koala.ppm koala horizontal-flip koal koala koala-horizontal-flip save
+//  res\koala-horizontal-flip.ppm koala-horizontal-flip q

@@ -1,4 +1,4 @@
-package ImageProcessing.controller;
+package imageprocessing.controller;
 
 /**
  * Represents a controller that will handle the calling of image processing (the model) and

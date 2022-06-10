@@ -1,4 +1,4 @@
-package ImageProcessing.model;
+package imageprocessing.model;
 
 import java.util.Objects;
 
@@ -30,48 +30,54 @@ public class Pixel {
   }
 
   /**
+   * Provides the red value of this pixel.
    *
-   * @return
+   * @return the red value.
    */
   public int getRed() {
     return red;
   }
 
   /**
+   * Provides the green value of this pixel.
    *
-   * @return
+   * @return the green value.
    */
   public int getGreen() {
     return green;
   }
 
   /**
+   * Provides the blue value of this pixel.
    *
-   * @return
+   * @return the blue value.
    */
   public int getBlue() {
     return blue;
   }
 
   /**
+   * Adjusts the red value of this pixel.
    *
-   * @param red
+   * @param red the value that the red should be set to.
    */
   public void setRed(int red) {
     this.red = red;
   }
 
   /**
+   * Adjusts the green value of this pixel.
    *
-   * @param green
+   * @param green the value that the green should be set to.
    */
   public void setGreen(int green) {
     this.green = green;
   }
 
   /**
+   * Adjusts the blue value of this pixel.
    *
-   * @param blue
+   * @param blue the value that the blue should be set to.
    */
   public void setBlue(int blue) {
     this.blue = blue;

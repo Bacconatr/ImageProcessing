@@ -1,6 +1,6 @@
-package ImageProcessing.controller.Macros;
+package imageprocessing.controller.Macros;
 
-import ImageProcessing.model.ImageProcessingModel;
+import imageprocessing.model.ImageProcessingModel;
 
 /**
  * Represents a macro that will execute on an ImageProcessingModel.
@@ -14,3 +14,4 @@ public interface ImageProcessingMacro {
    */
   void executeProcessingMacro(ImageProcessingModel model);
 }
+//  how do we test inputs

@@ -1,9 +1,9 @@
-package ImageProcessing.model.ComponentBiFunctions;
+package imageprocessing.model.ComponentBiFunctions;
 
 import java.util.function.BiFunction;
 
-import ImageProcessing.model.Pixel;
-import ImageProcessing.model.Posn;
+import imageprocessing.model.Pixel;
+import imageprocessing.model.Posn;
 
 public class RedBiFunction implements BiFunction<Posn, Pixel[][], Pixel> {
 

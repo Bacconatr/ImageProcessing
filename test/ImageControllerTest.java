@@ -7,14 +7,22 @@ import static org.junit.Assert.*;
  */
 public class ImageControllerTest {
 
+
   @Test
-  public void testStartProcessing() {
+  public void testNullModel() {
 
   }
 
   @Test
-  public void testInputs() {
+  public void testNullView() {
 
   }
+
+  @Test
+  public void testNullAppendable() {
+
+  }
+
+
 
 }

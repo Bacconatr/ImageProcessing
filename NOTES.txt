@@ -14,6 +14,22 @@ intensity, or value (choose one).
 ***************************** Questions *****************************:
 
 
+
+Questions 6.9.22
+- besides testing the inputs should I test the executeProcess method in the command line arguments?
+  Or would these cover by the startProcessing() method in the controller.
+- Given that we use the command design pattern how would we implement functionality that retries
+  inputs
+- What kind of exceptions should be thrown?
+- Do are macros need to throw exceptions if null inputs are provided? Is this something we have to
+  test for?
+    - In general when should you throw exceptions vs using default java exceptions
+    is it just when user input is involved?
+- Do we need to be able to account for different maximum RGB values? If so it doesn't seem possible
+to do so
+- Does our test for save work? If not it doesn't seem there are any other possible ways
+
+
 OH QUESTIONS:
 - Is it better design for our controller to read and load images?
   *** should be in the model? not sure but may be better
@@ -32,13 +48,9 @@ OH QUESTIONS:
      the Macro objects
 
 
-
 Questions 6.7.22
 - For createRepresentation is this okay design or could we try to implement the commandDesign
   pattern?
-
-
-
 
 
 - Do we need to actually create the images? *answer* most likely a yes
