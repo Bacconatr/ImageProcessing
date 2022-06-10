@@ -5,14 +5,14 @@ import java.io.IOException;
 /**
  *
  */
-public class IProcessingImageViewImpl implements IProcessingImageView {
+public class BasicImageProcessingView implements IProcessingImageView {
 
   private final Appendable appendable;
 
   /**
    *
    */
-  public IProcessingImageViewImpl() {
+  public BasicImageProcessingView() {
     this.appendable = System.out;
   }
 
@@ -20,7 +20,7 @@ public class IProcessingImageViewImpl implements IProcessingImageView {
    *
    * @param appendable
    */
-  public IProcessingImageViewImpl(Appendable appendable) {
+  public BasicImageProcessingView(Appendable appendable) {
     this.appendable = appendable;
   }
 

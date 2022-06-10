@@ -5,12 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 
 /**
  *
  */
 public class ImageProcessingModelImpl implements ImageProcessingModel {
-  private HashMap<String, Pixel[][]> mapOfImages;
+  private final HashMap<String, Pixel[][]> mapOfImages;
 
   /**
    * Constructs an ImageProcessingModelImpl.
@@ -18,6 +19,21 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
   public ImageProcessingModelImpl() {
     mapOfImages = new HashMap<String, Pixel[][]>();
   }
+
+  @Override
+  public Pixel[][] imageState(String imageName) throws IllegalArgumentException {
+    Pixel[][] state = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
+    if (state == null) {
+      throw new IllegalArgumentException("The specified image does not exist.");
+    }
+    return state;
+  }
+
+  @Override
+  public int numImages() {
+    return mapOfImages.size();
+  }
+
 
   @Override
   public void createRepresentation(VisualizationType type, String filename) {
@@ -33,8 +49,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
   @Override
   public void adjustLight(int value, String filename) throws IllegalArgumentException {
 
-    Pixel[][] image = mapOfImages.getOrDefault(filename, null).clone();
-
+    Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(filename, null));
 
     if (image == null) {
       throw new IllegalArgumentException("Didn't provide the name of an existing images.");
@@ -116,13 +131,9 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
         int b = sc.nextInt();
 
         listOfPixels[i][j] = new Pixel(r, g, b);
-
-
-        //  System.out.println("Color of pixel (" + j + "," + i + "): " + r + "," + g + "," + b);
-
-        mapOfImages.put(fileName, listOfPixels);
       }
     }
+    mapOfImages.put(fileName, listOfPixels);
   }
 
   public void savePPM(String filePath, String fileName) throws IllegalArgumentException {
@@ -160,8 +171,18 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
       }
 
     }
+  }
 
-
+  // creates a deep copy of an image. If the image provided is null return null.
+  private Pixel[][] imageDeepCopy(Pixel[][] image) {
+    if (image == null) {
+      return null;
+    }
+    Pixel[][] temp = new Pixel[image.length][image[0].length];
+    for (int i = 0; i < image.length; i++) {
+      System.arraycopy(image[i], 0, temp[i], 0, image[i].length);
+    }
+    return temp;
   }
 
 }

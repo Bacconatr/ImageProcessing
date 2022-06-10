@@ -13,6 +13,26 @@ intensity, or value (choose one).
 
 ***************************** Questions *****************************:
 
+
+OH QUESTIONS:
+- Is it better design for our controller to read and load images?
+  *** should be in the model? not sure but may be better
+- Does our command and design pattern need to be the same as lab 6 or is what we have fine
+- Do we have to use command line arguments for our main method in this assignment?
+- Can we have two back to back scanners in our controller?
+- When writing tests for the model should we be loading in an image?
+  is it okay to define a controller in our model tests to do so?
+- Since our view is only used to render messages do we have to pass it to the controller? Also, does
+  it need to take in a model if it doesn't actually use it?
+  *** no
+- When handling incorrect user inputs all we need to do is throw an Exception? Or should we
+  re-prompt until a successful argument is given
+  *** it is a better decision to implement re-prompts. this is just the better decision
+    - How would we handle exceptions with the command design pattern when the scanners are inside
+     the Macro objects
+
+
+
 Questions 6.7.22
 - For createRepresentation is this okay design or could we try to implement the commandDesign
   pattern?

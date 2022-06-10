@@ -1,15 +1,20 @@
 package ImageProcessing.controller.Macros;
 
+import java.util.function.BiFunction;
+
 import ImageProcessing.model.ImageProcessingModel;
+import ImageProcessing.model.Pixel;
+import ImageProcessing.model.Posn;
 
 /**
  * Represents an AbstractComponentMacro that will perform a process on a file of the given name. The
  * type of process that is executed depends on the implementation required for the class that
  * extends it, but generally some grey-scaling operation will be performed.
  */
-public abstract class AbstractComponentMacro implements ImageProcessingMacro {
-  protected final String fileName;
-  protected final String outPutName;
+public class ComponentMacro implements ImageProcessingMacro {
+  private final String fileName;
+  private final String outPutName;
+  private final BiFunction<Posn, Pixel[][], Pixel> biFunction;
 
   /**
    * Constructs a macro that will perform a process on a file of the given name.
@@ -17,7 +22,8 @@ public abstract class AbstractComponentMacro implements ImageProcessingMacro {
    * @param fileName   the name of the file that will be executed on.
    * @param outPutName the name of the resulting file that will be added to the image map.
    */
-  public AbstractComponentMacro(String fileName, String outPutName)
+  public ComponentMacro(String fileName, String outPutName,
+                        BiFunction<Posn, Pixel[][], Pixel> biFunction)
           throws IllegalArgumentException {
     if (fileName == null) {
       throw new IllegalArgumentException("The File Name must be non-null.");
@@ -27,6 +33,7 @@ public abstract class AbstractComponentMacro implements ImageProcessingMacro {
     }
     this.fileName = fileName;
     this.outPutName = outPutName;
+    this.biFunction = biFunction;
   }
 
   /**
@@ -35,5 +42,7 @@ public abstract class AbstractComponentMacro implements ImageProcessingMacro {
    * @param model the ImageProcessing model that will be executed on.
    */
   @Override
-  public abstract void executeProcessingMacro(ImageProcessingModel model);
+  public void executeProcessingMacro(ImageProcessingModel model) {
+    model.createRepresentation(fileName, outPutName, biFunction);
+  }
 }

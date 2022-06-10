@@ -1,20 +1,23 @@
 package ImageProcessing.controller.Macros;
 
+import ImageProcessing.model.FlipType;
 import ImageProcessing.model.ImageProcessingModel;
 
 /**
  *
  */
-public abstract class AbstractFlipMacro implements ImageProcessingMacro {
-  protected final String fileName;
-  protected final String outPutName;
+public class FlipMacro implements ImageProcessingMacro {
+  private final String fileName;
+  private final String outPutName;
+  private final FlipType flipType;
 
   /**
    *
    * @param fileName
    * @param outPutName
    */
-  public AbstractFlipMacro(String fileName, String outPutName) throws IllegalArgumentException {
+  public FlipMacro(String fileName, String outPutName, FlipType flipType)
+          throws IllegalArgumentException {
     if (fileName == null) {
       throw new IllegalArgumentException("The File Name must be a non-null value.");
     }
@@ -23,6 +26,7 @@ public abstract class AbstractFlipMacro implements ImageProcessingMacro {
     }
     this.fileName = fileName;
     this.outPutName = outPutName;
+    this.flipType = flipType;
   }
 
   /**
@@ -31,5 +35,7 @@ public abstract class AbstractFlipMacro implements ImageProcessingMacro {
    * @param model the ImageProcessing model that will be executed on.
    */
   @Override
-  public abstract void executeProcessingMacro(ImageProcessingModel model);
+  public void executeProcessingMacro(ImageProcessingModel model) {
+    model.flip(flipType, fileName, outPutName);
+  }
 }
