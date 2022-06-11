@@ -1,16 +1,15 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import imageprocessing.model.ComponentBiFunctions.BlueBiFunction;
-import imageprocessing.model.ComponentBiFunctions.GreenBiFunction;
-import imageprocessing.model.ComponentBiFunctions.IntensityBiFunction;
-import imageprocessing.model.ComponentBiFunctions.LumaBiFunction;
-import imageprocessing.model.ComponentBiFunctions.RedBiFunction;
-import imageprocessing.model.ComponentBiFunctions.ValueBiFunction;
+import imageprocessing.model.componentbifunctions.BlueBiFunction;
+import imageprocessing.model.componentbifunctions.GreenBiFunction;
+import imageprocessing.model.componentbifunctions.IntensityBiFunction;
+import imageprocessing.model.componentbifunctions.LumaBiFunction;
+import imageprocessing.model.componentbifunctions.RedBiFunction;
+import imageprocessing.model.componentbifunctions.ValueBiFunction;
 import imageprocessing.model.FlipType;
 import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.model.ImageProcessingModelImpl;
-import imageprocessing.model.Pixel;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -21,7 +20,7 @@ import static org.junit.Assert.fail;
  */
 public class ImageProcessingImplTest {
   ImageProcessingModel model;
-  Pixel[][] checkImage;
+  ImageProcessingModelImpl.Pixel[][] checkImage;
 
   @Before
   public void init() {
@@ -31,11 +30,11 @@ public class ImageProcessingImplTest {
     // assigning each pixel to a specific value
     // this image is the same as 2by2.ppm
 
-    checkImage = new Pixel[2][2];
-    checkImage[0][0] = new Pixel(255, 0, 0);
-    checkImage[0][1] = new Pixel(0, 255, 0);
-    checkImage[1][0] = new Pixel(0, 0, 255);
-    checkImage[1][1] = new Pixel(250, 100, 100);
+    checkImage = new ImageProcessingModelImpl.Pixel[2][2];
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
   }
 
   @Test
@@ -58,7 +57,7 @@ public class ImageProcessingImplTest {
     assertArrayEquals(checkImage, model.imageState("2x2"));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testRedInvalidInput() {
     model.createRepresentation("does not exist", "will not load", new RedBiFunction());
   }
@@ -66,14 +65,14 @@ public class ImageProcessingImplTest {
   @Test
   public void testCreateRepresentationRed() {
     model.createRepresentation("2x2", "2x2-red-greyscale", new RedBiFunction());
-    checkImage[0][0] = new Pixel(255, 255, 255);
-    checkImage[0][1] = new Pixel(0, 0, 0);
-    checkImage[1][0] = new Pixel(0, 0, 0);
-    checkImage[1][1] = new Pixel(250, 250, 250);
-    assertArrayEquals(model.imageState("2x2-red-greyscale"), checkImage);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(250, 250, 250);
+    assertArrayEquals(checkImage, model.imageState("2x2-red-greyscale"));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testBlueInvalidInput() {
     model.createRepresentation("does not exist", "will not load", new BlueBiFunction());
   }
@@ -81,15 +80,15 @@ public class ImageProcessingImplTest {
   @Test
   public void testCreateRepresentationBlue() {
     model.createRepresentation("2x2", "2x2-blue-greyscale", new BlueBiFunction());
-    checkImage[0][0] = new Pixel(0, 0, 0);
-    checkImage[0][1] = new Pixel(0, 0, 0);
-    checkImage[1][0] = new Pixel(255, 255, 255);
-    checkImage[1][1] = new Pixel(100, 100, 100);
-    assertArrayEquals(model.imageState("2x2-blue-greyscale"), checkImage);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    assertArrayEquals(checkImage, model.imageState("2x2-blue-greyscale"));
   }
 
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testGreenInvalidInput() {
     model.createRepresentation("does not exist", "will not load", new GreenBiFunction());
   }
@@ -97,15 +96,15 @@ public class ImageProcessingImplTest {
   @Test
   public void testCreateRepresentationGreen() {
     model.createRepresentation("2x2", "2x2-green-greyscale", new GreenBiFunction());
-    checkImage[0][0] = new Pixel(0, 0, 0);
-    checkImage[0][1] = new Pixel(255, 255, 255);
-    checkImage[1][0] = new Pixel(0, 0, 0);
-    checkImage[1][1] = new Pixel(100, 100, 100);
-    assertArrayEquals(model.imageState("2x2-green-greyscale"), checkImage);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    assertArrayEquals(checkImage, model.imageState("2x2-green-greyscale"));
   }
 
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testValueInvalidInput() {
     model.createRepresentation("does not exist", "will not load", new ValueBiFunction());
   }
@@ -113,15 +112,15 @@ public class ImageProcessingImplTest {
   @Test
   public void testCreateRepresentationValue() {
     model.createRepresentation("2x2", "2x2-value-greyscale", new ValueBiFunction());
-    checkImage[0][0] = new Pixel(255, 255, 255);
-    checkImage[0][1] = new Pixel(255, 255, 255);
-    checkImage[1][0] = new Pixel(255, 255, 255);
-    checkImage[1][1] = new Pixel(250, 250, 250);
-    assertArrayEquals(model.imageState("2x2-value-greyscale"), checkImage);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(250, 250, 250);
+    assertArrayEquals(checkImage, model.imageState("2x2-value-greyscale"));
   }
 
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testLumaInvalidInput() {
     model.createRepresentation("does not exist", "will not load", new LumaBiFunction());
   }
@@ -129,15 +128,15 @@ public class ImageProcessingImplTest {
   @Test
   public void testCreateRepresentationLuma() {
     model.createRepresentation("2x2", "2x2-luma-greyscale", new LumaBiFunction());
-    checkImage[0][0] = new Pixel(54, 54, 54);
-    checkImage[0][1] = new Pixel(182, 182, 182);
-    checkImage[1][0] = new Pixel(18, 18, 18);
-    checkImage[1][1] = new Pixel(131, 131, 131);
-    assertArrayEquals(model.imageState("2x2-luma-greyscale"), checkImage);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(54, 54, 54);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(182, 182, 182);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(18, 18, 18);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(131, 131, 131);
+    assertArrayEquals(checkImage, model.imageState("2x2-luma-greyscale"));
   }
 
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testIntensityInvalidInput() {
     model.createRepresentation("does not exist", "will not load", new IntensityBiFunction());
   }
@@ -145,11 +144,11 @@ public class ImageProcessingImplTest {
   @Test
   public void testCreateRepresentationIntensity() {
     model.createRepresentation("2x2", "2x2-intensity-greyscale", new IntensityBiFunction());
-    checkImage[0][0] = new Pixel(85, 85, 85);
-    checkImage[0][1] = new Pixel(85, 85, 85);
-    checkImage[1][0] = new Pixel(85, 85, 85);
-    checkImage[1][1] = new Pixel(150, 150, 150);
-    assertArrayEquals(model.imageState("2x2-intensity-greyscale"), checkImage);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(85, 85, 85);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(85, 85, 85);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(85, 85, 85);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(150, 150, 150);
+    assertArrayEquals(checkImage, model.imageState("2x2-intensity-greyscale"));
   }
 
   @Test
@@ -159,25 +158,25 @@ public class ImageProcessingImplTest {
     model.flip(FlipType.Vertical, "2x2", "2x2-verticalFlip");
 
 
-    checkImage[1][0] = new Pixel(255, 0, 0);
-    checkImage[1][1] = new Pixel(0, 255, 0);
-    checkImage[0][0] = new Pixel(0, 0, 255);
-    checkImage[0][1] = new Pixel(250, 100, 100);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
 
 
-    assertArrayEquals(model.imageState("2x2-verticalFlip"), checkImage);
+    assertArrayEquals(checkImage, model.imageState("2x2-verticalFlip"));
 
     model = new ImageProcessingModelImpl();
     model.readPPM("res\\2by2.ppm", "2x2");
     model.flip(FlipType.Horizontal, "2x2", "2x2-verticalFlip");
 
 
-    checkImage[0][1] = new Pixel(255, 0, 0);
-    checkImage[0][0] = new Pixel(0, 255, 0);
-    checkImage[1][1] = new Pixel(0, 0, 255);
-    checkImage[1][0] = new Pixel(250, 100, 100);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
 
-    assertArrayEquals(model.imageState("2x2-verticalFlip"), checkImage);
+    assertArrayEquals(checkImage, model.imageState("2x2-verticalFlip"));
 
   }
 
@@ -196,12 +195,12 @@ public class ImageProcessingImplTest {
     model.readPPM("res\\2by2.ppm", "2x2");
     model.adjustLight(10, "2x2", "2x2-brighten");
 
-    checkImage[0][0] = new Pixel(255, 10, 10);
-    checkImage[0][1] = new Pixel(10, 255, 10);
-    checkImage[1][0] = new Pixel(10, 10, 255);
-    checkImage[1][1] = new Pixel(255, 110, 110);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(255, 10, 10);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(10, 255, 10);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(10, 10, 255);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
 
-    assertArrayEquals(model.imageState("2x2-brighten"), checkImage);
+    assertArrayEquals(checkImage, model.imageState("2x2-brighten"));
 
     // darken an image
 
@@ -209,12 +208,12 @@ public class ImageProcessingImplTest {
     model.readPPM("res\\2by2.ppm", "2x2");
     model.adjustLight(-10, "2x2", "2x2-darken");
 
-    checkImage[0][0] = new Pixel(245, 0, 0);
-    checkImage[0][1] = new Pixel(0, 245, 0);
-    checkImage[1][0] = new Pixel(0, 0, 245);
-    checkImage[1][1] = new Pixel(240, 90, 90);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(245, 0, 0);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(0, 245, 0);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 245);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(240, 90, 90);
 
-    assertArrayEquals(model.imageState("2x2-darken"), checkImage);
+    assertArrayEquals(checkImage, model.imageState("2x2-darken"));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -252,16 +251,16 @@ public class ImageProcessingImplTest {
     }
 
     model.readPPM("res/9pixel.ppm", "9pixel");
-    Pixel[][] expected = new Pixel[3][3];
-    expected[0][0] = new Pixel(255, 0, 0);
-    expected[0][1] = new Pixel(0, 255, 0);
-    expected[0][2] = new Pixel(0, 0, 255);
-    expected[1][0] = new Pixel(0, 0, 0);
-    expected[1][1] = new Pixel(255, 255, 255);
-    expected[1][2] = new Pixel(100, 100, 100);
-    expected[2][0] = new Pixel(250, 100, 100);
-    expected[2][1] = new Pixel(230, 20, 70);
-    expected[2][2] = new Pixel(94, 232, 255);
+    ImageProcessingModelImpl.Pixel[][] expected = new ImageProcessingModelImpl.Pixel[3][3];
+    expected[0][0] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
+    expected[0][1] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
+    expected[0][2] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
+    expected[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    expected[1][1] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    expected[1][2] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    expected[2][0] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
+    expected[2][1] = new ImageProcessingModelImpl.Pixel(230, 20, 70);
+    expected[2][2] = new ImageProcessingModelImpl.Pixel(94, 232, 255);
     assertArrayEquals(expected, model.imageState("9pixel"));
   }
 
@@ -283,6 +282,8 @@ public class ImageProcessingImplTest {
       assertEquals(e.getMessage(), "The image you are trying to save does not exist.");
     }
 
+    // could add a command about what operation was performed on the file.
+
     // saves to the saveTester.ppm file with a currently existing image within the model
     // (this will overwrite any previous file that was created when running this test)
     model.savePPM("res/saveTester.ppm", "2x2");
@@ -290,5 +291,66 @@ public class ImageProcessingImplTest {
     model.readPPM("res/saveTester.ppm", "fileSaveSuccessful");
     assertArrayEquals(checkImage, model.imageState("fileSaveSuccessful"));
 
+    // ***** Note that checkImage is the same as 2x2. It is the expected and is defined in the init
+
   }
+
+  @Test
+  public void testHorizontalAndVertical() {
+
+    model = new ImageProcessingModelImpl();
+    model.readPPM("res\\2by2.ppm", "2x2");
+    model.flip(FlipType.Vertical, "2x2", "2x2-verticalFlip");
+    model.flip(FlipType.Horizontal, "2x2-verticalFlip",
+            "2x2-verticalHorizontalFlip");
+
+
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
+
+
+    assertArrayEquals(checkImage, model.imageState("2x2-verticalHorizontalFlip"));
+
+  }
+
+  @Test
+  public void testComponentFlipAndBrighten() {
+
+    model = new ImageProcessingModelImpl();
+    model.readPPM("res\\2by2.ppm", "2x2");
+    model.adjustLight(20, "2x2", "2x2-brighten");
+    model.flip(FlipType.Horizontal, "2x2-brighten",
+            "2x2-brightenHorizontalFlip");
+
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(255, 20, 20);
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(20, 255, 20);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(20, 20, 255);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(255, 120, 120);
+
+    assertArrayEquals(checkImage, model.imageState("2x2-brightenHorizontalFlip"));
+
+  }
+
+  @Test
+  public void testPerformProcessAndSaveThenLoad() {
+
+    model = new ImageProcessingModelImpl();
+    model.readPPM("res\\2by2.ppm", "2x2");
+    model.adjustLight(10, "2x2", "2x2-brighten");
+    model.savePPM("res\\2x2brighten.ppm", "2x2-brighten");
+
+    model.readPPM("res\\2x2brighten.ppm", "2x2-brighten.ppm");
+
+    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(255, 10, 10);
+    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(10, 255, 10);
+    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(10, 10, 255);
+    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
+
+    assertArrayEquals(checkImage, model.imageState("2x2-brighten.ppm"));
+
+
+  }
+
 }

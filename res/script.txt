@@ -1,0 +1,3 @@
+load res\elephant.ppm elephant darken 50 elephant elephant-darken horizontal-flip elephant-darken
+elephant-horizontalFlip luma-component elephant-horizontalFlip elephant-final save res/forTA.ppm
+elephant-final q

@@ -2,8 +2,7 @@ import java.util.function.BiFunction;
 
 import imageprocessing.model.FlipType;
 import imageprocessing.model.ImageProcessingModel;
-import imageprocessing.model.Pixel;
-import imageprocessing.model.Posn;
+import imageprocessing.model.ImageProcessingModelImpl;
 
 /**
  * A mock used to test the inputs that pass through an ImageProcessingModel from the controller.
@@ -11,7 +10,7 @@ import imageprocessing.model.Posn;
  */
 public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
 
-  private StringBuilder log;
+  private final StringBuilder log;
 
   public ConfirmInputsImageProcessingModel(StringBuilder log) {
     this.log = log;
@@ -31,8 +30,10 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
    */
   @Override
   public void createRepresentation(String imageName, String newImageName,
-                                   BiFunction<Posn, Pixel[][], Pixel> representation) {
-
+                                   BiFunction<ImageProcessingModelImpl.Posn,
+                                           ImageProcessingModelImpl.Pixel[][],
+                                           ImageProcessingModelImpl.Pixel> representation) {
+    log.append(imageName).append(" ").append(newImageName).append("; ");
   }
 
   /**
@@ -43,7 +44,8 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
    */
   @Override
   public void flip(FlipType flip, String imageName, String newImageName) {
-
+    log.append(flip.toString()).append(" ").append(imageName).append(" ").append(newImageName)
+            .append("; ");
   }
 
   /**
@@ -54,7 +56,7 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
    */
   @Override
   public void adjustLight(int value, String imageName, String newImageName) {
-
+    log.append(value).append(" ").append(imageName).append(" ").append(newImageName).append("; ");
   }
 
   /**
@@ -69,7 +71,7 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
    */
   @Override
   public void savePPM(String filePath, String imageName) throws IllegalArgumentException {
-
+    log.append(filePath).append(" ").append(imageName).append("; ");
   }
 
   /**
@@ -81,7 +83,7 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
    */
   @Override
   public void readPPM(String filePath, String imageName) {
-
+    log.append(filePath).append(" ").append(imageName).append("; ");
   }
 
   /**
@@ -92,8 +94,11 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
    * @return the state of the image.
    */
   @Override
-  public Pixel[][] imageState(String imageName) throws IllegalArgumentException {
-    return new Pixel[0][];
+  public ImageProcessingModelImpl.Pixel[][] imageState(String imageName)
+          throws IllegalArgumentException {
+    // this method is used to represent the state and is not used by the controller which is
+    // processing user input
+    return new ImageProcessingModelImpl.Pixel[0][];
   }
 
   /**
@@ -104,6 +109,8 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
    */
   @Override
   public int numImages() {
+    // this method is used to represent the state and is not used by the controller which is
+    // processing user input
     return 0;
   }
 }

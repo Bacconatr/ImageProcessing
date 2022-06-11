@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.BiFunction;
 
@@ -21,7 +22,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
    * Constructs an ImageProcessingModelImpl.
    */
   public ImageProcessingModelImpl() {
-    mapOfImages = new HashMap<String, Pixel[][]>();
+    mapOfImages = new HashMap<>();
   }
 
   @Override
@@ -195,18 +196,18 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         writer.write("P3");
         writer.newLine();
-        writer.write(String.valueOf(fileToSave[0].length) + " " +
-                String.valueOf(fileToSave.length));
+        writer.write(fileToSave[0].length + " " +
+                fileToSave.length);
         writer.newLine();
         writer.write(String.valueOf(255));
         writer.newLine();
-        for (int i = 0; i < fileToSave.length; i++) {
+        for (Pixel[] pixels : fileToSave) {
           for (int j = 0; j < fileToSave[0].length; j++) {
-            writer.write(String.valueOf(fileToSave[i][j].getRed()));
+            writer.write(String.valueOf(pixels[j].getRed()));
             writer.newLine();
-            writer.write(String.valueOf(fileToSave[i][j].getGreen()));
+            writer.write(String.valueOf(pixels[j].getGreen()));
             writer.newLine();
-            writer.write(String.valueOf(fileToSave[i][j].getBlue()));
+            writer.write(String.valueOf(pixels[j].getBlue()));
             writer.newLine();
           }
         }
@@ -232,4 +233,155 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
     return temp;
   }
 
+  /**
+   * Represents a pixel of an image. This pixel contains RGB values with a range of 0-255 (8 bit).
+   */
+  public static class Pixel {
+    private int red;
+    private int green;
+    private int blue;
+
+    /**
+     * Constructs a Pixel.
+     *
+     * @param red   the red value of this pixel.
+     * @param green the green value of this pixel.
+     * @param blue  the blue value of this pixel.
+     */
+    public Pixel(int red, int green, int blue) {
+      if (red < 0 || green < 0 || blue < 0) {
+        throw new IllegalArgumentException("A color value cannot be negative");
+      }
+      if (red > 255 || green > 255 || blue > 255) {
+        throw new IllegalArgumentException("A color value cannot be greater than 255");
+      }
+      this.red = red;
+      this.green = green;
+      this.blue = blue;
+    }
+
+    /**
+     * Provides the red value of this pixel.
+     *
+     * @return the red value.
+     */
+    public int getRed() {
+      return red;
+    }
+
+    /**
+     * Provides the green value of this pixel.
+     *
+     * @return the green value.
+     */
+    public int getGreen() {
+      return green;
+    }
+
+    /**
+     * Provides the blue value of this pixel.
+     *
+     * @return the blue value.
+     */
+    public int getBlue() {
+      return blue;
+    }
+
+    /**
+     * Adjusts the red value of this pixel.
+     *
+     * @param red the value that the red should be set to.
+     */
+    public void setRed(int red) {
+      this.red = red;
+    }
+
+    /**
+     * Adjusts the green value of this pixel.
+     *
+     * @param green the value that the green should be set to.
+     */
+    public void setGreen(int green) {
+      this.green = green;
+    }
+
+    /**
+     * Adjusts the blue value of this pixel.
+     *
+     * @param blue the value that the blue should be set to.
+     */
+    public void setBlue(int blue) {
+      this.blue = blue;
+    }
+
+    /**
+     * Determines if this is equal to the provided object.
+     *
+     * @param o the object to be compared to.
+     * @return true if this is equal to the object provided, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+      if (o == this) {
+        return true;
+      }
+      if (!(o instanceof Pixel)) {
+        return false;
+      }
+      Pixel other = (Pixel) o;
+      return this.red == other.red
+              && this.green == other.green
+              && this.blue == other.blue;
+    }
+
+    /**
+     * Computes the hash code for this Pixel object.
+     *
+     * @return the hashcode using the fields of this Pixel.
+     */
+    @Override
+    public int hashCode() {
+      return Objects.hash(this.red, this.green, this.blue);
+    }
+
+  }
+
+  /**
+   * A simple Posn. Represents a position with an x and y value on a 2d plane. The coordinates of
+   * this posn are in (y,x) rather than (x,y) to represents rows and columns.
+   */
+  public static class Posn {
+    private final int y;
+    private final int x;
+
+    /**
+     * Constructs a Posn. Is reordered from (x,y) to (y,x) to think of it as in terms of rows and
+     * columns.
+     *
+     * @param y the y value of this posn (the row).
+     * @param x the x value of this posn (the column).
+     */
+    public Posn(int y, int x) {
+      this.y = y;
+      this.x = x;
+    }
+
+    /**
+     * Provides the y value of this posn.
+     *
+     * @return the y value.
+     */
+    public int getY() {
+      return this.y;
+    }
+
+    /**
+     * Provides the x value of this posn.
+     *
+     * @return the x value.
+     */
+    public int getX() {
+      return this.x;
+    }
+  }
 }

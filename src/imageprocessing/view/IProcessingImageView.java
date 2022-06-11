@@ -1,37 +1,20 @@
 package imageprocessing.view;
 
 /**
- *
+ * Represents a view that is able to display necessary messages for a program. Does not support
+ * rendering of the image states. Only supports the rendering of basic messages.
  */
 public interface IProcessingImageView {
 
   /**
+   * Renders a provided message by appending it to the appendable.
    *
-   * @param message
+   * @param message the message to be rendered.
    */
   void renderMessage(String message);
 
   /**
-   *
+   * Displays an intro message when the program is started.
    */
   void introMessage();
-
-  /**
-   *
-   */
-  void menuHelp();
 }
-
-/* OH Notes:
-the goal of this assignment is to think of everything that the view will need
-we might be able to modify these interface but once we publish an interface we can no longer edit
- it, so we should design our view and model to anticipate
-
- "this is future proofing for whenever the view might need this information"
- as long as we have justification for a public method we can add it
-
- while it is okay to extend interfaces it may become unwieldy since you will have many interfaces
- it's simpler to just add the methods from the start
-
- don't anticipate the view. we are anticipating what a future view will need from the model
- */

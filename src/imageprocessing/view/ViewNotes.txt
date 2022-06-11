@@ -1,7 +1,0 @@
- @Override
-  public File savePPM(String fileName) {
-    return null;
-  }
-
-  The view is going to be saving the file, we are going to need to add a getter to get a specific
-  file from the model with given String fileName;
