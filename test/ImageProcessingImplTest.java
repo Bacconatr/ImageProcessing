@@ -1,7 +1,9 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import imageprocessing.controller.ImageControllerImpl;
 import imageprocessing.model.componentbifunctions.BlueBiFunction;
+import imageprocessing.model.componentbifunctions.FilterBiFunction;
 import imageprocessing.model.componentbifunctions.GreenBiFunction;
 import imageprocessing.model.componentbifunctions.IntensityBiFunction;
 import imageprocessing.model.componentbifunctions.LumaBiFunction;
@@ -35,6 +37,7 @@ public class ImageProcessingImplTest {
     checkImage[0][1] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
     checkImage[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
     checkImage[1][1] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
+
   }
 
   @Test
@@ -352,5 +355,44 @@ public class ImageProcessingImplTest {
 
 
   }
+
+  @Test
+  public void testBlur() {
+    model = new ImageProcessingModelImpl();
+    model.readPPM("res/9pixel.ppm", "three!");
+    assertEquals(255, model.imageState("three!")[1][1].getRed());
+    model.createRepresentation("three!", "three!",
+            new FilterBiFunction(ImageControllerImpl.BLUR_KERNEL));
+    // testing the red channel with the blur
+    // assertEquals(79, model.imageState("3x3")[0][0].getRed());
+     assertEquals(142, model.imageState("three!")[1][1].getRed());
+
+    //    ImageProcessingModelImpl.Pixel[][] blurred = new ImageProcessingModelImpl.Pixel[3][3];
+    //    blurred[0][0] = new ImageProcessingModelImpl.Pixel(255, 10, 10);
+    //    blurred[0][1] = new ImageProcessingModelImpl.Pixel(10, 255, 10);
+    //    blurred[0][2] = new ImageProcessingModelImpl.Pixel(10, 255, 10);
+    //    blurred[1][0] = new ImageProcessingModelImpl.Pixel(10, 10, 255);
+    //    blurred[1][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
+    //    blurred[1][2] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
+    //    blurred[2][0] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
+    //    blurred[2][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
+    //    blurred[2][2] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
+  }
+
+  @Test
+  public void testSharpen() {
+    model = new ImageProcessingModelImpl();
+    model.readPPM("res/5x5.ppm", "5x5");
+    assertEquals(80, model.imageState("5x5")[2][2].getRed());
+    model.createRepresentation("5x5", "5x5",
+            new FilterBiFunction(ImageControllerImpl.SHARPEN_KERNEL));
+    // these tests are for when 80, 90, 100 is at the first pixel
+//    assertEquals(92, model.imageState("5x5")[0][0].getRed());
+//    assertEquals(102, model.imageState("5x5")[0][0].getGreen());
+
+    // these tests are for when 80, 90, 100 is at the center pixel
+     assertEquals(80, model.imageState("5x5")[2][2].getRed());
+  }
+
 
 }

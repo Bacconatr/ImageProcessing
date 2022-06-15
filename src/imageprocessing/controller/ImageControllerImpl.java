@@ -14,6 +14,7 @@ import imageprocessing.controller.macros.ImageProcessingMacro;
 import imageprocessing.controller.macros.LoadMacro;
 import imageprocessing.controller.macros.SaveMacro;
 import imageprocessing.model.componentbifunctions.BlueBiFunction;
+import imageprocessing.model.componentbifunctions.FilterBiFunction;
 import imageprocessing.model.componentbifunctions.GreenBiFunction;
 import imageprocessing.model.componentbifunctions.IntensityBiFunction;
 import imageprocessing.model.componentbifunctions.LumaBiFunction;
@@ -34,6 +35,21 @@ public class ImageControllerImpl implements IProcessingImageController {
   private final IProcessingImageView view;
   private final Readable readable;
   private final Map<String, Function<Scanner, ImageProcessingMacro>> imageProcessingCommands;
+
+  public static double[][] BLUR_KERNEL = {{(double) 1 / 16, (double) 1 / 8, (double) 1 / 16},
+                                          {(double) 1 / 8, (double) 1 / 4, (double) 1 / 8},
+                                          {(double) 1 / 16, (double) 1 / 8, (double) 1 / 16}};
+
+  public static double[][] SHARPEN_KERNEL = {{(double) -1 / 8, (double) -1 / 8, (double) -1 / 8,
+                                              (double) -1 / 8, (double) -1 / 8},
+                                             {(double) -1 / 8, (double) 1 / 4, (double) 1 / 4,
+                                             (double) 1 / 4, (double) -1 / 8},
+                                             {(double) -1 / 8, (double) 1 / 4, 1.0, (double) 1 / 4,
+                                             (double) -1 / 8},
+                                             {(double) -1 / 8, (double) 1 / 4, (double) 1 / 4,
+                                             (double) 1 / 4, (double) -1 / 8},
+                                             {(double) -1 / 8, (double) -1 / 8, (double) -1 / 8,
+                                             (double) -1 / 8, (double) -1 / 8}};
 
   /**
    * Constructs an ImageControllerImpl.
@@ -57,9 +73,9 @@ public class ImageControllerImpl implements IProcessingImageController {
     imageProcessingCommands.put("save", sc -> new SaveMacro(sc.next(), sc.next()));
     // adjusting the light
     imageProcessingCommands.put("brighten",
-        sc -> new AdjustLightMacro(sc.nextInt(), sc.next(), sc.next(), true));
+            sc -> new AdjustLightMacro(sc.nextInt(), sc.next(), sc.next(), true));
     imageProcessingCommands.put("darken",
-        sc -> new AdjustLightMacro(sc.nextInt(), sc.next(), sc.next(), false));
+            sc -> new AdjustLightMacro(sc.nextInt(), sc.next(), sc.next(), false));
     // grey scaling
     imageProcessingCommands.put("red-component", sc -> new ComponentMacro(sc.next(), sc.next(),
             new RedBiFunction()));
@@ -78,6 +94,13 @@ public class ImageControllerImpl implements IProcessingImageController {
             FlipType.Horizontal));
     imageProcessingCommands.put("vertical-flip", sc -> new FlipMacro(sc.next(),
             sc.next(), FlipType.Vertical));
+
+    // ############### REFACTORED ###########################
+    // added another command
+    imageProcessingCommands.put("blur", sc -> new ComponentMacro(sc.next(), sc.next(),
+            new FilterBiFunction(BLUR_KERNEL)));
+    imageProcessingCommands.put("sharpen", sc -> new ComponentMacro(sc.next(), sc.next(),
+            new FilterBiFunction(SHARPEN_KERNEL)));
 
   }
 

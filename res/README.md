@@ -146,6 +146,8 @@ below in "Support Commands".
 
     luma-component [image name] [new image name]
 
+    sharpen [image name] [new image name]
+
 
 ### Valid Inputs
 

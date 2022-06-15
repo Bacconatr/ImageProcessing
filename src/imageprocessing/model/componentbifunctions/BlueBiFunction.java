@@ -11,7 +11,6 @@ import imageprocessing.model.ImageProcessingModelImpl;
 public class BlueBiFunction implements
         BiFunction<ImageProcessingModelImpl.Posn, ImageProcessingModelImpl.Pixel[][],
                 ImageProcessingModelImpl.Pixel> {
-
   /**
    * Applies this function to the given arguments.
    *

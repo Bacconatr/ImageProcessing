@@ -43,17 +43,19 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
   @Override
   public void createRepresentation(String imageName, String newImageName,
                                    BiFunction<Posn, Pixel[][], Pixel> representation) {
-    Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
-    if (image == null) {
+    // #### REFACTORED ###
+    // CHANGED SO THAT THE ORIGINAL IMAGE IS NOT MUTATED AS WE ITERATE OVER THE FOR LOOP
+    Pixel[][] originalImage = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
+    if (originalImage == null) {
       throw new IllegalArgumentException("The file for this component grey-scaling was not found.");
     }
-    for (int i = 0; i < image.length; i++) {
-      for (int j = 0; j < image[0].length; j++) {
-        image[i][j] = representation.apply(new Posn(i, j), image);
+    Pixel[][] newImage = new Pixel[originalImage.length][originalImage[0].length];
+    for (int i = 0; i < originalImage.length; i++) {
+      for (int j = 0; j < originalImage[0].length; j++) {
+        newImage[i][j] = representation.apply(new Posn(i, j), originalImage);
       }
     }
-    mapOfImages.put(newImageName, image);
-
+    mapOfImages.put(newImageName, newImage);
   }
 
   @Override
@@ -287,13 +289,17 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
       return blue;
     }
 
+    // ######## REFACTORED ALL SETTERS SO THAT THE RANGE IS 0-255
     /**
      * Adjusts the red value of this pixel.
      *
      * @param red the value that the red should be set to.
      */
     public void setRed(int red) {
-      this.red = red;
+      if (red > 255) {
+        this.red = 255;
+      } else
+        this.red = Math.max(red, 0);
     }
 
     /**
@@ -302,7 +308,10 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
      * @param green the value that the green should be set to.
      */
     public void setGreen(int green) {
-      this.green = green;
+      if (green > 255) {
+        this.green = 255;
+      } else
+        this.green = Math.max(green, 0);
     }
 
     /**
@@ -311,7 +320,10 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
      * @param blue the value that the blue should be set to.
      */
     public void setBlue(int blue) {
-      this.blue = blue;
+      if (blue > 255) {
+        this.blue = 255;
+      } else
+        this.blue = Math.max(blue, 0);
     }
 
     /**
