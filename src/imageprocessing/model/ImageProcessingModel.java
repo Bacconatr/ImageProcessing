@@ -75,6 +75,7 @@ public interface ImageProcessingModel extends ImageProcessingState {
    * @param imageName the name of the image that will be loaded and represented as data.
    */
   void readPPM(String filePath, String imageName);
+
 }
 
 
