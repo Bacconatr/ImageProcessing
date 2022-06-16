@@ -307,20 +307,16 @@ public class ImageProcessingImplTest {
     model.flip(FlipType.Horizontal, "2x2-verticalFlip",
             "2x2-verticalHorizontalFlip");
 
-
     checkImage[1][1] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
     checkImage[1][0] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
     checkImage[0][1] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
     checkImage[0][0] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
 
-
     assertArrayEquals(checkImage, model.imageState("2x2-verticalHorizontalFlip"));
-
   }
 
   @Test
   public void testComponentFlipAndBrighten() {
-
     model = new ImageProcessingModelImpl();
     model.readPPM("res\\2by2.ppm", "2x2");
     model.adjustLight(20, "2x2", "2x2-brighten");
@@ -352,8 +348,6 @@ public class ImageProcessingImplTest {
     checkImage[1][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
 
     assertArrayEquals(checkImage, model.imageState("2x2-brighten.ppm"));
-
-
   }
 
   @Test
@@ -364,19 +358,21 @@ public class ImageProcessingImplTest {
     model.createRepresentation("three!", "three!",
             new FilterBiFunction(ImageControllerImpl.BLUR_KERNEL));
     // testing the red channel with the blur
-    // assertEquals(79, model.imageState("3x3")[0][0].getRed());
-     assertEquals(142, model.imageState("three!")[1][1].getRed());
+    assertEquals(79, model.imageState("three!")[0][0].getRed());
+    assertEquals(142, model.imageState("three!")[1][1].getRed());
 
-    //    ImageProcessingModelImpl.Pixel[][] blurred = new ImageProcessingModelImpl.Pixel[3][3];
-    //    blurred[0][0] = new ImageProcessingModelImpl.Pixel(255, 10, 10);
-    //    blurred[0][1] = new ImageProcessingModelImpl.Pixel(10, 255, 10);
-    //    blurred[0][2] = new ImageProcessingModelImpl.Pixel(10, 255, 10);
-    //    blurred[1][0] = new ImageProcessingModelImpl.Pixel(10, 10, 255);
-    //    blurred[1][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
-    //    blurred[1][2] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
-    //    blurred[2][0] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
-    //    blurred[2][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
-    //    blurred[2][2] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
+    ImageProcessingModelImpl.Pixel[][] blurred = new ImageProcessingModelImpl.Pixel[3][3];
+    blurred[0][0] = new ImageProcessingModelImpl.Pixel(79, 47, 15);
+    blurred[0][1] = new ImageProcessingModelImpl.Pixel(70, 101, 70);
+    blurred[0][2] = new ImageProcessingModelImpl.Pixel(28, 60, 92);
+    blurred[1][0] = new ImageProcessingModelImpl.Pixel(109, 61, 48);
+    blurred[1][1] = new ImageProcessingModelImpl.Pixel(142, 131, 123);
+    blurred[1][2] = new ImageProcessingModelImpl.Pixel(83, 103, 125);
+    blurred[2][0] = new ImageProcessingModelImpl.Pixel(107, 43, 49);
+    blurred[2][1] = new ImageProcessingModelImpl.Pixel(138, 84, 100);
+    blurred[2][2] = new ImageProcessingModelImpl.Pixel(80, 88, 100);
+
+    assertArrayEquals(model.imageState("three!"), blurred);
   }
 
   @Test
@@ -387,11 +383,11 @@ public class ImageProcessingImplTest {
     model.createRepresentation("5x5", "5x5",
             new FilterBiFunction(ImageControllerImpl.SHARPEN_KERNEL));
     // these tests are for when 80, 90, 100 is at the first pixel
-//    assertEquals(92, model.imageState("5x5")[0][0].getRed());
-//    assertEquals(102, model.imageState("5x5")[0][0].getGreen());
+    //    assertEquals(92, model.imageState("5x5")[0][0].getRed());
+    //    assertEquals(102, model.imageState("5x5")[0][0].getGreen());
 
     // these tests are for when 80, 90, 100 is at the center pixel
-     assertEquals(80, model.imageState("5x5")[2][2].getRed());
+    assertEquals(80, model.imageState("5x5")[2][2].getRed());
   }
 
 

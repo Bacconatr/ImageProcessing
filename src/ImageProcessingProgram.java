@@ -3,6 +3,7 @@ import java.io.StringReader;
 
 import imageprocessing.controller.IProcessingImageController;
 import imageprocessing.controller.ImageControllerImpl;
+import imageprocessing.model.AdvancedImageProcessingModel;
 import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.model.ImageProcessingModelImpl;
 import imageprocessing.view.BasicImageProcessingView;
@@ -30,7 +31,8 @@ public class ImageProcessingProgram {
         }
       }
       Readable in = new StringReader(script.toString());
-      ImageProcessingModel model = new ImageProcessingModelImpl();
+      // ImageProcessingModel model = new ImageProcessingModelImpl();
+      ImageProcessingModel model = new AdvancedImageProcessingModel();
       IProcessingImageView view = new BasicImageProcessingView();
       IProcessingImageController controller = new ImageControllerImpl(model, view, in);
       controller.startProcessing();
@@ -38,7 +40,8 @@ public class ImageProcessingProgram {
     // if the user wants to type in inputs themselves then check for inputs
     else {
       Readable in = new InputStreamReader(System.in);
-      ImageProcessingModel model = new ImageProcessingModelImpl();
+      // ImageProcessingModel model = new ImageProcessingModelImpl();
+      ImageProcessingModel model = new AdvancedImageProcessingModel();
       IProcessingImageView view = new BasicImageProcessingView();
       IProcessingImageController controller = new ImageControllerImpl(model, view, in);
       controller.startProcessing();

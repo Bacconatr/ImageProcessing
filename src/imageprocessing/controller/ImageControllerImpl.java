@@ -14,6 +14,7 @@ import imageprocessing.controller.macros.ImageProcessingMacro;
 import imageprocessing.controller.macros.LoadMacro;
 import imageprocessing.controller.macros.SaveMacro;
 import imageprocessing.model.componentbifunctions.BlueBiFunction;
+import imageprocessing.model.componentbifunctions.ColorTransformationBiFunction;
 import imageprocessing.model.componentbifunctions.FilterBiFunction;
 import imageprocessing.model.componentbifunctions.GreenBiFunction;
 import imageprocessing.model.componentbifunctions.IntensityBiFunction;
@@ -36,6 +37,7 @@ public class ImageControllerImpl implements IProcessingImageController {
   private final Readable readable;
   private final Map<String, Function<Scanner, ImageProcessingMacro>> imageProcessingCommands;
 
+  // ######## Added matrices for blurring, sharpening, and color transformations ########
   public static double[][] BLUR_KERNEL = {{(double) 1 / 16, (double) 1 / 8, (double) 1 / 16},
                                           {(double) 1 / 8, (double) 1 / 4, (double) 1 / 8},
                                           {(double) 1 / 16, (double) 1 / 8, (double) 1 / 16}};
@@ -50,6 +52,12 @@ public class ImageControllerImpl implements IProcessingImageController {
                                              (double) 1 / 4, (double) -1 / 8},
                                              {(double) -1 / 8, (double) -1 / 8, (double) -1 / 8,
                                              (double) -1 / 8, (double) -1 / 8}};
+  public static double[][] GREYSCALE = {{0.2126, 0.7152, 0.0722},
+                                          {0.2126, 0.7152, 0.0722},
+                                          {0.2126, 0.7152, 0.0722}};
+  public static double[][] SEPIA_TONE = {{0.393, 0.769, 0.189},
+                                        {0.349, 0.686, 0.168},
+                                        {0.272, 0.534, 0.131}};
 
   /**
    * Constructs an ImageControllerImpl.
@@ -101,6 +109,13 @@ public class ImageControllerImpl implements IProcessingImageController {
             new FilterBiFunction(BLUR_KERNEL)));
     imageProcessingCommands.put("sharpen", sc -> new ComponentMacro(sc.next(), sc.next(),
             new FilterBiFunction(SHARPEN_KERNEL)));
+
+    imageProcessingCommands.put("greyscale", sc -> new ComponentMacro(sc.next(), sc.next(),
+            new ColorTransformationBiFunction(GREYSCALE)));
+    imageProcessingCommands.put("sepia", sc -> new ComponentMacro(sc.next(), sc.next(),
+            new ColorTransformationBiFunction(SEPIA_TONE)));
+
+
 
   }
 

@@ -16,7 +16,8 @@ import java.util.function.BiFunction;
  *
  */
 public class ImageProcessingModelImpl implements ImageProcessingModel {
-  private final HashMap<String, Pixel[][]> mapOfImages;
+  // ######### REFACTORED FROM PRIVATE TO PROTECTED SO IT CAN BE INHERITED #############
+  protected final HashMap<String, Pixel[][]> mapOfImages;
 
   /**
    * Constructs an ImageProcessingModelImpl.
@@ -251,15 +252,11 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
      * @param blue  the blue value of this pixel.
      */
     public Pixel(int red, int green, int blue) {
-      if (red < 0 || green < 0 || blue < 0) {
-        throw new IllegalArgumentException("A color value cannot be negative");
-      }
-      if (red > 255 || green > 255 || blue > 255) {
-        throw new IllegalArgumentException("A color value cannot be greater than 255");
-      }
-      this.red = red;
-      this.green = green;
-      this.blue = blue;
+      // ### REFACTORED ###
+      // SO THAT INSTEAD OF THROWING AN EXCEPTION WE APPLY A CLAMP
+      this.red = clamp(red);
+      this.green = clamp(green);
+      this.blue = clamp(blue);
     }
 
     /**
@@ -296,10 +293,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
      * @param red the value that the red should be set to.
      */
     public void setRed(int red) {
-      if (red > 255) {
-        this.red = 255;
-      } else
-        this.red = Math.max(red, 0);
+      this.red = clamp(red);
     }
 
     /**
@@ -308,10 +302,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
      * @param green the value that the green should be set to.
      */
     public void setGreen(int green) {
-      if (green > 255) {
-        this.green = 255;
-      } else
-        this.green = Math.max(green, 0);
+      this.green = clamp(green);
     }
 
     /**
@@ -320,10 +311,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
      * @param blue the value that the blue should be set to.
      */
     public void setBlue(int blue) {
-      if (blue > 255) {
-        this.blue = 255;
-      } else
-        this.blue = Math.max(blue, 0);
+      this.blue = clamp(blue);
     }
 
     /**
@@ -354,6 +342,19 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
     @Override
     public int hashCode() {
       return Objects.hash(this.red, this.green, this.blue);
+    }
+
+    // ### REFACTORED ###
+    // private method that checks if a value is less than 0 or greater than 255 and applies
+    // a clamp appropriately
+    private int clamp(int value) {
+      if (value > 255) {
+        value = 255;
+      }
+      if (value < 0) {
+        value = 0;
+      }
+      return value;
     }
 
   }
