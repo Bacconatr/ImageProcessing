@@ -63,6 +63,10 @@ public interface ImageProcessingModel extends ImageProcessingState {
    */
   void savePPM(String filePath, String imageName) throws IllegalArgumentException;
 
+  // ##################### REFACTORED #############################
+  // removed load and moved it to the controller. The model SHOULD NOT have access to this method
+  // as it relates to IO and user input
+
   /**
    * Reads a PPM file at the given file path and converts it to an image that is represented in the
    * implementation (and is associated with the given image name).
@@ -71,11 +75,6 @@ public interface ImageProcessingModel extends ImageProcessingState {
    * @param imageName the name of the image that will be loaded and represented as data.
    */
   void readPPM(String filePath, String imageName);
-
-  // we can add methods that the view will likely need in the future
-  // future-proofing is a valid justification (as long as it is not doing a future view's jobs
-  // for it, if it's just giving the view what it has then this is fine)
-  // (can also use in the tests)
 }
 
 
