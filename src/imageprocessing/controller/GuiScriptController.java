@@ -53,7 +53,7 @@ public class GuiScriptController extends ImageControllerAdvancedImpl implements 
       int brightnessAmount = view.userBrightnessInput();
       StringBuilder latest = findLatestVersion();
       String newName = latest + "-brightness";
-      model.adjustLight(brightnessAmount, imageHistory.get(imageHistory.size()-1), newName);
+      model.adjustLight(brightnessAmount, imageHistory.get(imageHistory.size() - 1), newName);
       imageHistory.add(newName);
       updateImage();
     } catch (IllegalStateException e) {
@@ -153,9 +153,16 @@ public class GuiScriptController extends ImageControllerAdvancedImpl implements 
   @Override
   public void loadImageToDisplay() {
     String filePath = view.userLoadPath();
-    load(filePath, filePath);
-    imageHistory.add(filePath);
-    updateImage();
+    if (filePath != null) {
+      try {
+        load(filePath, filePath);
+      } catch (IllegalArgumentException e) {
+        view.showErrorMessage("Invalid load path.");
+        return;
+      }
+      imageHistory.add(filePath);
+      updateImage();
+    }
   }
 
   /**
@@ -169,7 +176,11 @@ public class GuiScriptController extends ImageControllerAdvancedImpl implements 
     }
     String savePath = view.userSavePath();
     if (savePath != null) {
-      save(savePath, imageHistory.get(imageHistory.size() - 1));
+      try {
+        save(savePath, imageHistory.get(imageHistory.size() - 1));
+      } catch (IllegalArgumentException e) {
+        view.showErrorMessage("Saving Error: Invalid File Type");
+      }
     }
   }
 

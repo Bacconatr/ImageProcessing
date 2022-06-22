@@ -5,11 +5,7 @@ import com.sun.jdi.Value;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.BiFunction;
-import java.util.logging.Filter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -246,6 +242,10 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
     return representation[retValue];
   }
 
+  /**
+   *
+   * @return
+   */
   @Override
   public int userBrightnessInput()  {
     String input = "";
