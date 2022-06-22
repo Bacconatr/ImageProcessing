@@ -1,5 +1,54 @@
 # Basic Image Processing
 
+## New Features
+
+1. Added blur, sharpen, sepia, and greyscale commands that the user can use to change the image
+   1. Blur blurs the image 
+   2. Sharpen sharpens the image
+   3. Greyscale uses a luma based greyscale
+   4. Sepia applies a sepia tone to the image
+2. Users can now load and save image files (bmp, jpg, png, etc.) in addition do .ppm files
+   1. The user can specify the extension of the file when providing the file path to the save 
+      command
+3. Program can now parse script files (.txt files) to read and execute commands.
+
+## Design/Implementation Changes and Additions with Justification
+
+1. Model
+    1. Refactored the model (ImageProcessingModelImpl) and its interface (ImageProcessingModel) 
+       to no longer support load and save commands as load and save take in user input and 
+       instead should be done by the Controller
+    2. The ImageProcessingModel interface consequently no longer ensure the readPPM and loadPPM 
+       methods.
+    3. Added a method to the ImageProcessingModel called addImage() that takes in a 2D Pixel 
+       array (which represents the state of an image) and the String name of the image. addImage 
+       adds that image state and String value to the field that stores the loaded images and 
+       their respective names. This change was necessary so that the controller can parse image 
+       data and pass it to the model to be worked on.
+       1. ImageProcessingModelImpl implements addImage() method.
+2. BiFunctions
+   1. Created a new FilterBiFunction that applies a kernel on a pixel (adjusting the RGB values).
+      This is used by the createRepresentation method and allows for blur and sharpen functionality
+   2. Created a new ColorTransformationBiFunction that applies a provided 3x3 matrix to 
+      transform the RGB value at the given pixel. This is used by the createRepresentation 
+      method and allows for Sepia and Greyscale functionality.
+3. Controller
+    1. Changed the Controller so that it now supports load and save command since they take in user
+       input. The Load and Save functionalities are not public methods since direct access to 
+       these methods is not required.
+    2. The Save and Load macros were removed since the model passed to those macros can no
+       longer perform load and save operations.
+    3. The StartProcessing Method was refactored to handle the load and save commands since the 
+       macros are no longer functional.
+    4. An additional controller was created ImageControllerAdvancedImpl that extends the 
+       previous controller (ImageControllerImpl) but allows for PPM support and image file save and 
+       load support
+    5. Added four new commands "blur", "sharpen", "sepia", and "greyscale" into the map of known 
+       commands (allows for the user to actually call the commands).
+4. Main Method
+   1. Refactored the Main Method to use the updated controller (ImageControllerAdvancedImpl).
+   2. Refactored the Main method to accept script files in addition to the previous functionality.
+
 ## Purpose of Program:
 
 This application allows for the processing of images. A user is able to upload their images by 
@@ -9,7 +58,7 @@ and grey-scaling an image.
 
 ## _**Running the Program**_
 
-### Using the Program Through Script
+### Using the Program Interactively
 
 Running the program without command line arguments allows the user to type in inputs that tell
 the program what to do. This program by design is primarily meant to be interacted with through 
@@ -26,7 +75,7 @@ type in a new command (without having to go to a new line).
 Once the user types a valid command, they will then be prompted for the arguments necessary for 
 that command.
 
-#### _**Dealing with Invalid Comamnds**_
+#### _**Invalid Inputs**_
 
 If a user inputs a valid command but has invalid arguments, they 
 are required to go to a new line and enter a valid command with valid arguments again. This was 
@@ -164,7 +213,7 @@ given command.
 
 We used an elephant as our image demonstration.
 
-![elephant image](elephant.png)
+![elephant image](res/elephant.png)
 
 Credit: https://www.pngall.com/elephant-png
 

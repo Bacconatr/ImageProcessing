@@ -60,31 +60,18 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
   }
 
   /**
-   * Saves the image associated with the given image name as a file to the path that the user
-   * provides.
+   * Adds an image to the field that handles storing images (this is dependent on the
+   * implementation).
    *
-   * @param filePath  the path that the image will be saved to. This path should include the name of
-   *                  the new file that will be created when it is stored locally. (e.g. C:/file.ppm
-   *                  is the required path to save the file to the C drive).
-   * @param imageName the name of the image that should be saved.
-   * @throws IllegalArgumentException if the image of the
+   * @param image     the image to be added (represented as a 2D Array of Pixels)
+   * @param imageName the name of the image provided
    */
   @Override
-  public void savePPM(String filePath, String imageName) throws IllegalArgumentException {
-    log.append(filePath).append(" ").append(imageName).append("; ");
+  public void addImage(ImageProcessingModelImpl.Pixel[][] image, String imageName) {
+    // NOT USED
+    String name = imageName;
   }
 
-  /**
-   * Reads a PPM file at the given file path and converts it to an image that is represented in the
-   * implementation (and is associated with the given image name).
-   *
-   * @param filePath  the path of the PPM file that will be read.
-   * @param imageName the name of the image that will be loaded and represented as data.
-   */
-  @Override
-  public void readPPM(String filePath, String imageName) {
-    log.append(filePath).append(" ").append(imageName).append("; ");
-  }
 
   /**
    * Given an imageName, return the state of the image. This method will be likely used by future

@@ -14,7 +14,7 @@ public class RedBiFunction implements BiFunction<ImageProcessingModelImpl.Posn,
   /**
    * Applies this function to the given arguments.
    *
-   * @param posn   the first function argument
+   * @param posn  the first function argument
    * @param image the second function argument
    * @return the function result
    */

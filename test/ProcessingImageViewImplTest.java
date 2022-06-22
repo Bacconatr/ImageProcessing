@@ -20,7 +20,7 @@ public class ProcessingImageViewImplTest {
     view = new BasicImageProcessingView(out);
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testConstructorNullParameters() {
     out = null;
     view = new BasicImageProcessingView(out);

@@ -1,0 +1,15 @@
+load res/elephant.ppm ele
+blur ele ele
+sharpen ele ele
+sepia ele ele
+greyscale ele ele
+horizontal-flip ele ele
+vertical-flip ele ele
+darken 10 ele ele brighten 10 ele ele
+WRONG_COMMAND
+darken WRONG_ARGUMENT_TYPE ele ele
+save WRONG_FILEPATH/WRONG.png ele
+blur WRONG ele
+red-component ele ele green-component ele ele blue-component ele ele
+luma-component ele ele intensity-component ele ele value-component ele ele
+save res/res2elephant/FOR_TA.png ele q

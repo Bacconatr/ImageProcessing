@@ -7,8 +7,8 @@ import java.io.IOException;
  * messages and an intro message. It does not render the state of the images.
  */
 public class BasicImageProcessingView implements IProcessingImageView {
-
-  private final Appendable appendable;
+  // ### Refactored to protected ###
+  protected final Appendable appendable;
 
   /**
    * Constructs a BasicImageProcessingView that defaults to System.out.

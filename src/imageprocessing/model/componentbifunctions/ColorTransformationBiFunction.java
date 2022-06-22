@@ -6,15 +6,19 @@ import java.util.function.BiFunction;
 import imageprocessing.model.ImageProcessingModelImpl;
 
 /**
- *
+ * A ColorTransformation bi function that acts on a given pixel at a given position and outputs a
+ * new version of that pixel in a way that its color is transformed.
  */
-public class ColorTransformationBiFunction implements BiFunction<ImageProcessingModelImpl.Posn, ImageProcessingModelImpl.Pixel[][],
+
+public class ColorTransformationBiFunction
+        implements BiFunction<ImageProcessingModelImpl.Posn, ImageProcessingModelImpl.Pixel[][],
         ImageProcessingModelImpl.Pixel> {
   private final double[][] transformation;
 
   /**
+   * Constructor for ColorTransformationBiFunction.
    *
-   * @param transformation
+   * @param transformation the specified transformation
    */
   public ColorTransformationBiFunction(double[][] transformation) {
     if (transformation.length != 3 || transformation[0].length != 3) {
@@ -24,11 +28,12 @@ public class ColorTransformationBiFunction implements BiFunction<ImageProcessing
   }
 
   /**
-   * Applies this function to the given arguments.
+   * Applies this function to the given arguments. This method will modify the provided pixel
+   * according to the 3x3 matrix provided.
    *
-   * @param posn   the first function argument
-   * @param pixels the second function argument
-   * @return the function result
+   * @param posn   the position of hte pixel
+   * @param pixels the image that contains the pixel provided
+   * @return the pixel that has been modified
    */
   @Override
   public ImageProcessingModelImpl.Pixel apply(ImageProcessingModelImpl.Posn posn,
@@ -40,9 +45,9 @@ public class ColorTransformationBiFunction implements BiFunction<ImageProcessing
     int y = posn.getY();
     ImageProcessingModelImpl.Pixel currentPixel = pixels[y][x];
 
-    int r = 0;
-    int g = 0;
-    int b = 0;
+    double r = 0;
+    double g = 0;
+    double b = 0;
     int[] rgb = {currentPixel.getRed(), currentPixel.getGreen(), currentPixel.getBlue()};
     for (int i = 0; i < transformation.length; i++) {
       for (int j = 0; j < transformation[0].length; j++) {
@@ -57,6 +62,6 @@ public class ColorTransformationBiFunction implements BiFunction<ImageProcessing
         }
       }
     }
-    return new ImageProcessingModelImpl.Pixel(r, g, b);
+    return new ImageProcessingModelImpl.Pixel((int) r, (int) g, (int) b);
   }
 }

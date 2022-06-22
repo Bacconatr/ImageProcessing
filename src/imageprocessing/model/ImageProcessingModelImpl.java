@@ -48,7 +48,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
     // CHANGED SO THAT THE ORIGINAL IMAGE IS NOT MUTATED AS WE ITERATE OVER THE FOR LOOP
     Pixel[][] originalImage = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
     if (originalImage == null) {
-      throw new IllegalArgumentException("The file for this component grey-scaling was not found.");
+      throw new IllegalArgumentException("The file for this command was not found.");
     }
     Pixel[][] newImage = new Pixel[originalImage.length][originalImage[0].length];
     for (int i = 0; i < originalImage.length; i++) {
@@ -346,6 +346,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
     }
 
     // ######## REFACTORED ALL SETTERS SO THAT THE RANGE IS 0-255
+
     /**
      * Adjusts the red value of this pixel.
      *

@@ -12,16 +12,14 @@ public interface ImageProcessingModel extends ImageProcessingState {
   // should split these methods since the view won't ever need it
 
   /**
-   * Creates a grey scale representation of the image that has the same image name that the user
-   * provides. A new image will be created and stored in this object with a new image name that the
-   * user also provides. This method takes in a BiFunction to determine what kind of representation
-   * will be made.
+   * Changes the RGB values of every pixel in the board based on a BiFunction that is passed. This
+   * allows us to create representations of our choosing as long as a BiFunction is passed that
+   * modifies a single pixel's state.
    *
-   * @param imageName      the name of the image that is going to be grey-scaled.
+   * @param imageName      the name of the image that is going to be adjusted.
    * @param newImageName   the new name of the image after the original image is represented.
    * @param representation the BiFunction that will perform work on each pixel in the image and will
-   *                       convert them to the appropriate color values. This determines how the
-   *                       grey-scaling will take place.
+   *                       convert them to the appropriate color values.
    */
   void createRepresentation(String imageName, String newImageName,
                             BiFunction<ImageProcessingModelImpl.Posn,
@@ -29,7 +27,7 @@ public interface ImageProcessingModel extends ImageProcessingState {
                                     ImageProcessingModelImpl.Pixel> representation);
 
   /**
-   * flips an image.
+   * Flips an image. Can be either horizontal or a vertical flip.
    *
    * @param flip         the type of flipping that will be performed (currently horizontal or
    *                     vertical)
@@ -39,7 +37,8 @@ public interface ImageProcessingModel extends ImageProcessingState {
   void flip(FlipType flip, String imageName, String newImageName);
 
   /**
-   * adjusts the light of an image.
+   * Adjusts the light of an image. Can either brighten or darken depending on the value argument.
+   *
    * @param value        the amount of brightness/darkness that will be applied (negative values is
    *                     equivalent to darkening while positive values brighten the image).
    * @param imageName    the name of the image to be brightened.
@@ -47,34 +46,23 @@ public interface ImageProcessingModel extends ImageProcessingState {
    */
   void adjustLight(int value, String imageName, String newImageName);
 
-  // these will likely fit in the model better, but there are arguments in both ways
-  // but this is likely the models job because THE MODELS STATE is changing (for load)
-  // save is a bit different since the model state is changing
-
-  /**
-   * Saves the image associated with the given image name as a file to the path that the user
-   * provides.
-   *
-   * @param filePath  the path that the image will be saved to. This path should include the name of
-   *                  the new file that will be created when it is stored locally. (e.g. C:/file.ppm
-   *                  is the required path to save the file to the C drive).
-   * @param imageName the name of the image that should be saved.
-   * @throws IllegalArgumentException if the image of the
-   */
-  void savePPM(String filePath, String imageName) throws IllegalArgumentException;
 
   // ##################### REFACTORED #############################
-  // removed load and moved it to the controller. The model SHOULD NOT have access to this method
-  // as it relates to IO and user input
+  // removed load and save and moved it to the controller. The model SHOULD NOT have access to this
+  // method as it relates to IO and user input
+
+  // ##################### REFACTORED #############################
+  // Added a new method called addImage. This is used to add an image to the list of images. This
+  // is required for the controller to pass a parsed image data to the model so that the model
+  // does not have to do the work can just simply accept an image state that is provided.
 
   /**
-   * Reads a PPM file at the given file path and converts it to an image that is represented in the
-   * implementation (and is associated with the given image name).
+   * Adds an image to the field that handles storing images (this is dependent on the
+   * implementation).
    *
-   * @param filePath  the path of the PPM file that will be read.
-   * @param imageName the name of the image that will be loaded and represented as data.
+   * @param image the image to be added (represented as a 2D Array of Pixels)
    */
-  void readPPM(String filePath, String imageName);
+  void addImage(ImageProcessingModelImpl.Pixel[][] image, String imageName);
 
 }
 

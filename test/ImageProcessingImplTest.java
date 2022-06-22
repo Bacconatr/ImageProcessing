@@ -23,11 +23,59 @@ import static org.junit.Assert.fail;
 public class ImageProcessingImplTest {
   ImageProcessingModel model;
   ImageProcessingModelImpl.Pixel[][] checkImage;
+  ImageProcessingModelImpl.Pixel[][] twoByTwo;
+  ImageProcessingModelImpl.Pixel[][] threeByThree;
+  ImageProcessingModelImpl.Pixel[][] fiveByFive;
+  ImageProcessingModelImpl.Pixel[][] greyscale;
 
   @Before
   public void init() {
     model = new ImageProcessingModelImpl();
-    model.readPPM("res/2by2.ppm", "2x2");
+    twoByTwo = new ImageProcessingModelImpl.Pixel[2][2];
+    twoByTwo[0][0] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
+    twoByTwo[0][1] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
+    twoByTwo[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
+    twoByTwo[1][1] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
+    model.addImage(twoByTwo, "2x2");
+
+    threeByThree = new ImageProcessingModelImpl.Pixel[3][3];
+    threeByThree[0][0] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
+    threeByThree[0][1] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
+    threeByThree[0][2] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
+    threeByThree[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
+    threeByThree[1][1] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
+    threeByThree[1][2] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    threeByThree[2][0] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
+    threeByThree[2][1] = new ImageProcessingModelImpl.Pixel(230, 20, 70);
+    threeByThree[2][2] = new ImageProcessingModelImpl.Pixel(94, 232, 255);
+
+    fiveByFive = new ImageProcessingModelImpl.Pixel[5][5];
+    fiveByFive[0][0] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[0][1] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[0][2] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[0][3] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[0][4] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[1][0] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[1][1] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[1][2] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[1][3] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[1][4] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[2][0] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[2][1] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[2][2] = new ImageProcessingModelImpl.Pixel(80, 90, 100);
+    fiveByFive[2][3] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[2][4] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[3][0] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[3][1] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[3][2] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[3][3] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[3][4] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[4][0] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[4][1] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[4][2] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[4][3] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+    fiveByFive[4][4] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
+
 
     // assigning each pixel to a specific value
     // this image is the same as 2by2.ppm
@@ -157,7 +205,7 @@ public class ImageProcessingImplTest {
   @Test
   public void testFlip() {
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.flip(FlipType.Vertical, "2x2", "2x2-verticalFlip");
 
 
@@ -170,7 +218,7 @@ public class ImageProcessingImplTest {
     assertArrayEquals(checkImage, model.imageState("2x2-verticalFlip"));
 
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.flip(FlipType.Horizontal, "2x2", "2x2-verticalFlip");
 
 
@@ -183,19 +231,22 @@ public class ImageProcessingImplTest {
 
   }
 
+  // NEEDS
+
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalFileNameFlip() {
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.flip(FlipType.Horizontal, "helloWorld", "2x2-verticalFlip");
 
   }
 
+  // NEEDS
   @Test
   public void testAdjustLight() {
     // brighten an image
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.adjustLight(10, "2x2", "2x2-brighten");
 
     checkImage[0][0] = new ImageProcessingModelImpl.Pixel(255, 10, 10);
@@ -208,7 +259,7 @@ public class ImageProcessingImplTest {
     // darken an image
 
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.adjustLight(-10, "2x2", "2x2-darken");
 
     checkImage[0][0] = new ImageProcessingModelImpl.Pixel(245, 0, 0);
@@ -219,90 +270,19 @@ public class ImageProcessingImplTest {
     assertArrayEquals(checkImage, model.imageState("2x2-darken"));
   }
 
+  // NEEDS
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalNameAdjustLight() {
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.adjustLight(-10, "iloveood", "2x2-brighten");
-  }
-
-  @Test
-  public void testReadPPMInvalidPath() {
-    try {
-      model.readPPM("res/invalidDirectory/2by2.ppm", "should not exist");
-      fail("the file path did exist");
-    } catch (IllegalArgumentException e) {
-      // the file path did not exist and an error was thrown appropriately
-    }
-    // an additional check to ensure that an invalid ppm file was not loaded as an image
-    try {
-      model.imageState("should not exist");
-      fail("the image was loaded when it shouldn't have");
-    } catch (IllegalArgumentException e) {
-      // the image was not loaded
-    }
-  }
-
-  @Test
-  public void testReadPPM() {
-    // this shows that 9pixel does not already exist in the model
-    try {
-      model.imageState("9pixel");
-      fail("Did not input a non-existing image name");
-    } catch (IllegalArgumentException e) {
-      assertEquals(e.getMessage(), "The specified image does not exist.");
-    }
-
-    model.readPPM("res/9pixel.ppm", "9pixel");
-    ImageProcessingModelImpl.Pixel[][] expected = new ImageProcessingModelImpl.Pixel[3][3];
-    expected[0][0] = new ImageProcessingModelImpl.Pixel(255, 0, 0);
-    expected[0][1] = new ImageProcessingModelImpl.Pixel(0, 255, 0);
-    expected[0][2] = new ImageProcessingModelImpl.Pixel(0, 0, 255);
-    expected[1][0] = new ImageProcessingModelImpl.Pixel(0, 0, 0);
-    expected[1][1] = new ImageProcessingModelImpl.Pixel(255, 255, 255);
-    expected[1][2] = new ImageProcessingModelImpl.Pixel(100, 100, 100);
-    expected[2][0] = new ImageProcessingModelImpl.Pixel(250, 100, 100);
-    expected[2][1] = new ImageProcessingModelImpl.Pixel(230, 20, 70);
-    expected[2][2] = new ImageProcessingModelImpl.Pixel(94, 232, 255);
-    assertArrayEquals(expected, model.imageState("9pixel"));
-  }
-
-  @Test
-  public void testSavePPM() {
-    // checks that if the file path doesn't exist an error is thrown
-    try {
-      model.savePPM("res/res/fail.ppm", "2x2");
-      fail("the file path actually existed");
-    } catch (IllegalArgumentException e) {
-      assertEquals(e.getMessage(), "Error, the file path provided does not exist.");
-    }
-
-    // checks that if the image name does not exist in the model an error is thrown
-    try {
-      model.savePPM("res/save.ppm", "non-existent image");
-      fail("the image actually existed");
-    } catch (IllegalArgumentException e) {
-      assertEquals(e.getMessage(), "The image you are trying to save does not exist.");
-    }
-
-    // could add a command about what operation was performed on the file.
-
-    // saves to the saveTester.ppm file with a currently existing image within the model
-    // (this will overwrite any previous file that was created when running this test)
-    model.savePPM("res/saveTester.ppm", "2x2");
-    // load the newly saved file into the model and check that it is the same value as the 2x2 image
-    model.readPPM("res/saveTester.ppm", "fileSaveSuccessful");
-    assertArrayEquals(checkImage, model.imageState("fileSaveSuccessful"));
-
-    // ***** Note that checkImage is the same as 2x2. It is the expected and is defined in the init
-
   }
 
   @Test
   public void testHorizontalAndVertical() {
 
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.flip(FlipType.Vertical, "2x2", "2x2-verticalFlip");
     model.flip(FlipType.Horizontal, "2x2-verticalFlip",
             "2x2-verticalHorizontalFlip");
@@ -318,7 +298,7 @@ public class ImageProcessingImplTest {
   @Test
   public void testComponentFlipAndBrighten() {
     model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
+    model.addImage(twoByTwo, "2x2");
     model.adjustLight(20, "2x2", "2x2-brighten");
     model.flip(FlipType.Horizontal, "2x2-brighten",
             "2x2-brightenHorizontalFlip");
@@ -333,33 +313,11 @@ public class ImageProcessingImplTest {
   }
 
   @Test
-  public void testPerformProcessAndSaveThenLoad() {
-
-    model = new ImageProcessingModelImpl();
-    model.readPPM("res\\2by2.ppm", "2x2");
-    model.adjustLight(10, "2x2", "2x2-brighten");
-    model.savePPM("res\\2x2brighten.ppm", "2x2-brighten");
-
-    model.readPPM("res\\2x2brighten.ppm", "2x2-brighten.ppm");
-
-    checkImage[0][0] = new ImageProcessingModelImpl.Pixel(255, 10, 10);
-    checkImage[0][1] = new ImageProcessingModelImpl.Pixel(10, 255, 10);
-    checkImage[1][0] = new ImageProcessingModelImpl.Pixel(10, 10, 255);
-    checkImage[1][1] = new ImageProcessingModelImpl.Pixel(255, 110, 110);
-
-    assertArrayEquals(checkImage, model.imageState("2x2-brighten.ppm"));
-  }
-
-  @Test
   public void testBlur() {
     model = new ImageProcessingModelImpl();
-    model.readPPM("res/9pixel.ppm", "three!");
-    assertEquals(255, model.imageState("three!")[1][1].getRed());
-    model.createRepresentation("three!", "three!",
+    model.addImage(threeByThree, "3x3");
+    model.createRepresentation("3x3", "3x3",
             new FilterBiFunction(ImageControllerImpl.BLUR_KERNEL));
-    // testing the red channel with the blur
-    assertEquals(79, model.imageState("three!")[0][0].getRed());
-    assertEquals(142, model.imageState("three!")[1][1].getRed());
 
     ImageProcessingModelImpl.Pixel[][] blurred = new ImageProcessingModelImpl.Pixel[3][3];
     blurred[0][0] = new ImageProcessingModelImpl.Pixel(79, 47, 15);
@@ -372,22 +330,46 @@ public class ImageProcessingImplTest {
     blurred[2][1] = new ImageProcessingModelImpl.Pixel(138, 84, 100);
     blurred[2][2] = new ImageProcessingModelImpl.Pixel(80, 88, 100);
 
-    assertArrayEquals(model.imageState("three!"), blurred);
+    assertArrayEquals(model.imageState("3x3"), blurred);
   }
 
   @Test
   public void testSharpen() {
     model = new ImageProcessingModelImpl();
-    model.readPPM("res/5x5.ppm", "5x5");
-    assertEquals(80, model.imageState("5x5")[2][2].getRed());
+    model.addImage(fiveByFive, "5x5");
+
     model.createRepresentation("5x5", "5x5",
             new FilterBiFunction(ImageControllerImpl.SHARPEN_KERNEL));
-    // these tests are for when 80, 90, 100 is at the first pixel
-    //    assertEquals(92, model.imageState("5x5")[0][0].getRed());
-    //    assertEquals(102, model.imageState("5x5")[0][0].getGreen());
 
-    // these tests are for when 80, 90, 100 is at the center pixel
-    assertEquals(80, model.imageState("5x5")[2][2].getRed());
+    ImageProcessingModelImpl.Pixel[][] sharpen = new ImageProcessingModelImpl.Pixel[5][5];
+
+    sharpen[0][0] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+    sharpen[0][1] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[0][2] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+    sharpen[0][3] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[0][4] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+    sharpen[1][0] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[1][1] = new ImageProcessingModelImpl.Pixel(207, 210, 212);
+    sharpen[1][2] = new ImageProcessingModelImpl.Pixel(157, 160, 162);
+    sharpen[1][3] = new ImageProcessingModelImpl.Pixel(207, 210, 212);
+    sharpen[1][4] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[2][0] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+    sharpen[2][1] = new ImageProcessingModelImpl.Pixel(157, 160, 162);
+    sharpen[2][2] = new ImageProcessingModelImpl.Pixel(80, 90, 100);
+    sharpen[2][3] = new ImageProcessingModelImpl.Pixel(157, 160, 162);
+    sharpen[2][4] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+    sharpen[3][0] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[3][1] = new ImageProcessingModelImpl.Pixel(207, 210, 212);
+    sharpen[3][2] = new ImageProcessingModelImpl.Pixel(157, 160, 162);
+    sharpen[3][3] = new ImageProcessingModelImpl.Pixel(207, 210, 212);
+    sharpen[3][4] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[4][0] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+    sharpen[4][1] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[4][2] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+    sharpen[4][3] = new ImageProcessingModelImpl.Pixel(152, 151, 150);
+    sharpen[4][4] = new ImageProcessingModelImpl.Pixel(115, 113, 112);
+
+    assertArrayEquals(sharpen, model.imageState("5x5"));
   }
 
 
