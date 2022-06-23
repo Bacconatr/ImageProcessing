@@ -50,6 +50,7 @@ public interface Features {
    */
   void saveCurrentImage();
 
+  int[][] colorHistogram();
 
   /**
    *

@@ -13,6 +13,7 @@ public interface IProcessingImageView {
    */
   void renderMessage(String message);
 
+  // this could just be private and called in the constructor
   /**
    * Displays an intro message when the program is started.
    */

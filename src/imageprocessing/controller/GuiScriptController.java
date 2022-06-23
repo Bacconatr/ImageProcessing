@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 import imageprocessing.model.FlipType;
 import imageprocessing.model.ImageProcessingModel;
@@ -13,26 +14,28 @@ import imageprocessing.view.IJFrameView;
 /**
  * A Controller that allows for a scripting mode and a GUI mode.
  */
-public class GuiScriptController extends ImageControllerAdvancedImpl implements Features {
-  private ImageProcessingModel model;
+public class GuiScriptController implements Features {
+  private final ImageProcessingModel model;
   private IJFrameView view;
-  private List<String> imageHistory;
+  private final List<String> imageHistory;
+  private final ImageControllerAdvancedImpl delegate;
 
   /**
-   * @param model
-   * @param view
-   * @param readable
+   * Constructs a GuiScriptController.
+   *
+   * @param model the model representing the loaded image states
    */
-  public GuiScriptController(ImageProcessingModel model, IJFrameView view, Readable readable) {
-    // for script mode
-    super(model, view, readable);
+  public GuiScriptController(ImageProcessingModel model) {
     this.model = model;
-    setView(view);
     imageHistory = new ArrayList<>();
+    delegate = new ImageControllerAdvancedImpl(model);
   }
 
   /**
-   * @param v
+   * Sets the GUI view and provides it with features that can be called on when a listener
+   * receives input.
+   *
+   * @param v the object that will be rendering the GUI
    */
   public void setView(IJFrameView v) {
     view = v;
@@ -155,7 +158,7 @@ public class GuiScriptController extends ImageControllerAdvancedImpl implements 
     String filePath = view.userLoadPath();
     if (filePath != null) {
       try {
-        load(filePath, filePath);
+        delegate.load(filePath, filePath);
       } catch (IllegalArgumentException e) {
         view.showErrorMessage("Invalid load path.");
         return;
@@ -177,11 +180,40 @@ public class GuiScriptController extends ImageControllerAdvancedImpl implements 
     String savePath = view.userSavePath();
     if (savePath != null) {
       try {
-        save(savePath, imageHistory.get(imageHistory.size() - 1));
+        delegate.save(savePath, imageHistory.get(imageHistory.size() - 1));
       } catch (IllegalArgumentException e) {
         view.showErrorMessage("Saving Error: Invalid File Type");
       }
     }
+  }
+
+  @Override
+  public int[][] colorHistogram() {
+
+    int[][] rgbFrequencies = new int[3][256];
+
+    // sets all the values to 0 in this array
+    // (code from intellij suggestion)
+    int[] redRepresentation = IntStream.range(0, 256).map(i -> 0).toArray();
+    int[] greenRepresentation = IntStream.range(0, 256).map(i -> 0).toArray();
+    int[] blueRepresentation = IntStream.range(0, 256).map(i -> 0).toArray();
+    ImageProcessingModelImpl.Pixel[][] currentState =
+            model.imageState(findLatestVersion().toString());
+    for (ImageProcessingModelImpl.Pixel[] pixels : currentState) {
+      for (int j = 0; j < currentState[0].length; j++) {
+        ImageProcessingModelImpl.Pixel currentPixel = pixels[j];
+        redRepresentation[currentPixel.getRed()] = redRepresentation[currentPixel.getRed()] + 1;
+        greenRepresentation[currentPixel.getGreen()] =
+                greenRepresentation[currentPixel.getGreen()] + 1;
+        blueRepresentation[currentPixel.getBlue()] = blueRepresentation[currentPixel.getBlue()] + 1;
+      }
+    }
+
+    rgbFrequencies[0] = redRepresentation;
+    rgbFrequencies[1] = greenRepresentation;
+    rgbFrequencies[2] = blueRepresentation;
+
+    return rgbFrequencies;
   }
 
 
@@ -197,8 +229,8 @@ public class GuiScriptController extends ImageControllerAdvancedImpl implements 
   private void updateImage() {
     ImageProcessingModelImpl.Pixel[][] latestImageState =
             model.imageState(findLatestVersion().toString());
-    BufferedImage currentImage = stateToImage(latestImageState);
-    view.updateImage(currentImage);
+    BufferedImage currentImage = delegate.stateToImage(latestImageState);
+    view.updateImage(currentImage, colorHistogram());
   }
 
   //

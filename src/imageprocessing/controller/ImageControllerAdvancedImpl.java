@@ -5,11 +5,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
 
 import javax.imageio.ImageIO;
 
 import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.model.ImageProcessingModelImpl;
+import imageprocessing.view.BasicImageProcessingView;
 import imageprocessing.view.IProcessingImageView;
 
 /**
@@ -32,6 +34,17 @@ public class ImageControllerAdvancedImpl extends ImageControllerImpl
   public ImageControllerAdvancedImpl(ImageProcessingModel model,
                                      IProcessingImageView view, Readable ap) {
     super(model, view, ap);
+  }
+  // ### Refactored ###
+  // added another convenience constructor
+  /**
+   * Constructs an ImageControllerImpl.
+   *
+   * @param model the model of the image processor (which has a Map of the images that the user is
+   *              performing processes on).
+   */
+  public ImageControllerAdvancedImpl(ImageProcessingModel model) {
+    super(model, new BasicImageProcessingView(), new StringReader("q"));
   }
 
   // loads the image at the given file path and passes that image to the model with the given

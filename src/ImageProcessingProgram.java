@@ -82,8 +82,8 @@ public class ImageProcessingProgram {
     else {
       ImageProcessingModel model = new ImageProcessingModelImpl();
       IJFrameView view = new JFrameViewImpl();
-      GuiScriptController controller = new GuiScriptController(model, view,
-              new InputStreamReader(System.in));
+      GuiScriptController controller = new GuiScriptController(model);
+      controller.setView(view);
     }
   }
 }

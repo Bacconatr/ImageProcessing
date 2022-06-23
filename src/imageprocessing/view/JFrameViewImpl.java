@@ -1,7 +1,5 @@
 package imageprocessing.view;
 
-import com.sun.jdi.Value;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,27 +26,26 @@ import imageprocessing.model.componentbifunctions.ValueBiFunction;
  *
  */
 public class JFrameViewImpl extends JFrame implements IJFrameView {
-  private final IProcessingImageView delegate = new BasicImageProcessingView();
-
   private JPanel mainPanel;
   private JScrollPane mainScrollPane;
-  private JButton exitButton;
-  private JButton horizontalFlipButton;
-  private JButton verticaLFlipButton;
-  private JButton greyscaleButton;
-  private JButton sepiaButton;
-  private JButton blurButton;
-  private JButton sharpenButton;
+  private final JButton exitButton;
+  private final JButton horizontalFlipButton;
+  private final JButton verticaLFlipButton;
+  private final JButton greyscaleButton;
+  private final JButton sepiaButton;
+  private final JButton blurButton;
+  private final JButton sharpenButton;
   // drop down
-  private JButton componentButton;
+  private final JButton componentButton;
   // user will type in a value
-  private JButton brightnessButton;
+  private final JButton brightnessButton;
 
   private JPanel imagePanel = new JPanel();
-  private JButton fileOpenButton;
-  private JLabel imageLabel;
+  private JPanel histogramPanel = new JPanel();
+  private final JButton fileOpenButton;
+  private final JLabel imageLabel;
 
-  private JButton fileSaveButton;
+  private final JButton fileSaveButton;
 
   /**
    *
@@ -60,6 +57,8 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
     setDefaultLookAndFeelDecorated(false);
     setSize(800, 800);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    this.setLayout(new GridLayout());
 
     // THE MAIN PANEL
     mainPanel = new JPanel();
@@ -74,15 +73,24 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
 
     imagePanel.setBorder(BorderFactory.createTitledBorder("Showing an image"));
     imagePanel.setLayout(new GridLayout(1, 0, 10, 10));
-    imagePanel.setMaximumSize(new Dimension(1000, 800));
+    // imagePanel.setMaximumSize(new Dimension(2000, 800));
     mainPanel.add(imagePanel);
 
     imageLabel = new JLabel();
     JScrollPane imageScrollPane = new JScrollPane(imageLabel);
     imageLabel.setIcon(new ImageIcon(""));
-    imageScrollPane.setPreferredSize(new Dimension(1000, 800));
+    imageScrollPane.setPreferredSize(new Dimension(500, 400));
     imagePanel.add(imageScrollPane);
 
+    // add a histogram panel
+
+    //    histogramPanel.setBorder(BorderFactory.createTitledBorder("Histogram"));
+    //    histogramPanel.setMaximumSize(new Dimension(1200, 800));
+    //    imagePanel.add(histogramPanel);
+
+    imagePanel.add(histogramPanel);
+
+    // ####################################################################################
 
     // PANEL CONTAINING ALL COMMANDS
     JPanel commandPanel = new JPanel();
@@ -170,6 +178,18 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
   }
 
   /**
+   * @param newImage
+   */
+  @Override
+  public void updateImage(BufferedImage newImage, int[][] histogram) {
+    imageLabel.setIcon(new ImageIcon(newImage));
+    imagePanel.remove(histogramPanel);
+    histogramPanel = new Histogram(histogram[0], histogram[1], histogram[2]);
+    imagePanel.add(histogramPanel);
+    imagePanel.validate();
+  }
+
+  /**
    * @return
    */
   @Override
@@ -210,13 +230,6 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
     // throw new IllegalStateException("The filetype was not valid");
   }
 
-  /**
-   * @param newImage
-   */
-  @Override
-  public void updateImage(BufferedImage newImage) {
-    imageLabel.setIcon(new ImageIcon(newImage));
-  }
 
   /**
    * @return
@@ -243,11 +256,12 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
   }
 
   /**
+   * Displays a pop-up box that prompts the user to input a brightness value.
    *
-   * @return
+   * @return the amount the image brightness will be adjusted by
    */
   @Override
-  public int userBrightnessInput()  {
+  public int userBrightnessInput() {
     String input = "";
     try {
       input = JOptionPane.showInputDialog("negative number to darken, positive number to brighten");
@@ -261,7 +275,10 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
   }
 
   /**
-   * @param errorMessage
+   * Displays a pop-up with the title "Error!". Renders the subsequent message (that will likely be
+   * an error message.
+   *
+   * @param errorMessage the error message to be displayed
    */
   @Override
   public void showErrorMessage(String errorMessage) {
@@ -289,28 +306,5 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
 
     fileOpenButton.addActionListener(event -> features.loadImageToDisplay());
     fileSaveButton.addActionListener(event -> features.saveCurrentImage());
-  }
-
-
-  // #################################### RELATED TO SCRIPTING ####################################
-
-  /**
-   * Renders a provided message by appending it to the appendable. This is used in Scripting and not
-   * GUI.
-   *
-   * @param message the message to be rendered.
-   */
-  @Override
-  public void renderMessage(String message) {
-    delegate.renderMessage(message);
-  }
-
-  /**
-   * Displays an intro message when the program is started. This is used for the Scripting mode and
-   * is not GUI related.
-   */
-  @Override
-  public void introMessage() {
-    delegate.introMessage();
   }
 }

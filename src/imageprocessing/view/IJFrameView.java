@@ -9,7 +9,7 @@ import imageprocessing.model.ImageProcessingModelImpl;
 /**
  *
  */
-public interface IJFrameView extends IProcessingImageView {
+public interface IJFrameView  {
 
 
   /**
@@ -27,7 +27,7 @@ public interface IJFrameView extends IProcessingImageView {
    *
    * @param newImage
    */
-  void updateImage(BufferedImage newImage);
+  void updateImage(BufferedImage newImage, int[][] histogram);
 
   /**
    *
