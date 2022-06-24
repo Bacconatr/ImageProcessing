@@ -7,29 +7,41 @@ import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 import imageprocessing.model.FlipType;
-import imageprocessing.model.ImageProcessingModel;
+import imageprocessing.model.ImageProcessingExtraFeatures;
 import imageprocessing.model.ImageProcessingModelImpl;
 import imageprocessing.view.IJFrameView;
+import imageprocessing.view.IProcessingImageView;
 
 /**
- * A Controller that allows for a scripting mode and a GUI mode.
+ * A Controller that allows for a GUI mode.
  */
-public class GuiScriptController implements Features {
-  private final ImageProcessingModel model;
+public class GuiScriptController implements Features{
+  private final ImageControllerAdvancedImpl delegate;
+  private final ImageProcessingExtraFeatures model;
   private IJFrameView view;
   private final List<String> imageHistory;
-  private final ImageControllerAdvancedImpl delegate;
 
   /**
    * Constructs a GuiScriptController.
    *
    * @param model the model representing the loaded image states
    */
-  public GuiScriptController(ImageProcessingModel model) {
+  public GuiScriptController(ImageProcessingExtraFeatures model) {
+    this.delegate = new ImageControllerAdvancedImpl(model);
     this.model = model;
     imageHistory = new ArrayList<>();
-    delegate = new ImageControllerAdvancedImpl(model);
   }
+
+//  /**
+//   * Constructs a GuiScriptController.
+//   *
+//   * @param model the model representing the loaded image states
+//   */
+//  public GuiScriptController(ImageProcessingExtraFeatures model, IProcessingImageView textView,
+//                             Readable rd) {
+//    this.model = model;
+//    imageHistory = new ArrayList<>();
+//  }
 
   /**
    * Sets the GUI view and provides it with features that can be called on when a listener
@@ -42,6 +54,7 @@ public class GuiScriptController implements Features {
     // gives the view this controller (providing access to the callback methods)
     view.addFeatures(this);
   }
+
 
   /**
    *
@@ -82,14 +95,6 @@ public class GuiScriptController implements Features {
     updateImage();
   }
 
-  // THE REASON THAT WE DO NOT SIMPLY OVERWRITE ONE IMAGE IN THE MODEL AND ADD NEW IMAGES WITH NEW
-  // NAMES IS SO WE CAN HAVE AN IMAGE HISTORY IN CASE WE NEED IT IN THE FUTURE
-
-  // REMEMBER TO THROW AN ERROR IF A BUTTON IS PRESSED WITHOUT AN IMAGE
-
-  // BE ABLE TO NOT THROW AN ERROR AND JUST GO BACK TO THE PROGRAM IF NO LOAD OR SAVE IS SELECTED
-
-  // ADD ERROR MESSAGE FOR IF USER INPUTS A STRING INSTEAD OF AN INT
 
   /**
    * @param flipType
@@ -187,10 +192,14 @@ public class GuiScriptController implements Features {
     }
   }
 
+  /**
+   *
+   * @return
+   */
   @Override
   public int[][] colorHistogram() {
 
-    int[][] rgbFrequencies = new int[3][256];
+    int[][] rgbFrequencies = new int[4][256];
 
     // sets all the values to 0 in this array
     // (code from intellij suggestion)
@@ -212,6 +221,8 @@ public class GuiScriptController implements Features {
     rgbFrequencies[0] = redRepresentation;
     rgbFrequencies[1] = greenRepresentation;
     rgbFrequencies[2] = blueRepresentation;
+    rgbFrequencies[3] = new int[]{currentState.length * currentState[0].length};
+
 
     return rgbFrequencies;
   }
@@ -239,6 +250,17 @@ public class GuiScriptController implements Features {
     String s = imageHistory.get(size - 1);
     return new StringBuilder(s);
   }
+
+  // THE REASON THAT WE DO NOT SIMPLY OVERWRITE ONE IMAGE IN THE MODEL AND ADD NEW IMAGES WITH NEW
+  // NAMES IS SO WE CAN HAVE AN IMAGE HISTORY IN CASE WE NEED IT IN THE FUTURE
+
+  // REMEMBER TO THROW AN ERROR IF A BUTTON IS PRESSED WITHOUT AN IMAGE
+
+  // BE ABLE TO NOT THROW AN ERROR AND JUST GO BACK TO THE PROGRAM IF NO LOAD OR SAVE IS SELECTED
+
+  // ADD ERROR MESSAGE FOR IF USER INPUTS A STRING INSTEAD OF AN INT
+
+  // ################### RELATED TO SCRIPTING ##################################
 
 
 }

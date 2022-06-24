@@ -99,7 +99,7 @@ public class ImageProcessingImplTest {
   public void testImageState() {
     // tests that calling the imageState on a non-existing image in the model throws an error
     try {
-      model.imageState("2x2-red-greyscale");
+      model.imageState("WRONG-NAME");
       fail("Did not input a non-existing image name");
     } catch (IllegalArgumentException e) {
       assertEquals(e.getMessage(), "The specified image does not exist.");

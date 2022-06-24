@@ -1,5 +1,6 @@
 package imageprocessing.controller.macros;
 
+import imageprocessing.model.ImageProcessingExtraFeatures;
 import imageprocessing.model.ImageProcessingModel;
 
 /**
@@ -13,4 +14,5 @@ public interface ImageProcessingMacro {
    * @param model the ImageProcessing model that will be executed on.
    */
   void executeProcessingMacro(ImageProcessingModel model);
+
 }

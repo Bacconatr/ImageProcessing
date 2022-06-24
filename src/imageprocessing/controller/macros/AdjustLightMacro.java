@@ -1,5 +1,6 @@
 package imageprocessing.controller.macros;
 
+import imageprocessing.model.ImageProcessingExtraFeatures;
 import imageprocessing.model.ImageProcessingModel;
 
 /**
@@ -49,4 +50,5 @@ public class AdjustLightMacro implements ImageProcessingMacro {
       model.adjustLight(increment * -1, fileName, outPutName);
     }
   }
+
 }

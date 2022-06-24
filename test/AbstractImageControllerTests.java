@@ -4,6 +4,8 @@ import org.junit.Test;
 import java.io.StringReader;
 
 import imageprocessing.controller.IProcessingImageController;
+import imageprocessing.model.ImageProcessingExtraFeatures;
+import imageprocessing.model.ImageProcessingExtraFeaturesImpl;
 import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.model.ImageProcessingModelImpl;
 import imageprocessing.view.BasicImageProcessingView;
@@ -35,7 +37,7 @@ public abstract class AbstractImageControllerTests {
   public void init() {
     in = new StringReader("q");
     out = new StringBuilder();
-    model = new ImageProcessingModelImpl();
+    model = new ImageProcessingExtraFeaturesImpl();
     view = new BasicImageProcessingView(out);
     controller = builder(model, view, in);
     log = new StringBuilder();

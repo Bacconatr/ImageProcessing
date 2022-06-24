@@ -1,5 +1,6 @@
 import imageprocessing.controller.IProcessingImageController;
 import imageprocessing.controller.ImageControllerImpl;
+import imageprocessing.model.ImageProcessingExtraFeatures;
 import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.view.IProcessingImageView;
 

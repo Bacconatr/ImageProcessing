@@ -7,12 +7,11 @@ import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.model.ImageProcessingModelImpl;
 
 /**
- * Represents an AbstractComponentMacro that will perform a process on a file of the given name. The
- * type of process that is executed depends on the implementation required for the class that
- * extends it, but generally some grey-scaling operation will be performed.
+ * Applies
  */
-public class ComponentMacro implements ImageProcessingMacro {
+public class MaskComponentMacro implements ImageProcessingMacro {
   private final String fileName;
+  private final String maskName;
   private final String outPutName;
   private final BiFunction<ImageProcessingModelImpl.Posn, ImageProcessingModelImpl.Pixel[][],
           ImageProcessingModelImpl.Pixel>
@@ -24,18 +23,22 @@ public class ComponentMacro implements ImageProcessingMacro {
    * @param fileName   the name of the file that will be executed on.
    * @param outPutName the name of the resulting file that will be added to the image map.
    */
-  public ComponentMacro(String fileName, String outPutName,
-                        BiFunction<ImageProcessingModelImpl.Posn,
-                                ImageProcessingModelImpl.Pixel[][],
-                                ImageProcessingModelImpl.Pixel> biFunction)
+  public MaskComponentMacro(String fileName, String outPutName, String maskName,
+                            BiFunction<ImageProcessingModelImpl.Posn,
+                                    ImageProcessingModelImpl.Pixel[][],
+                                    ImageProcessingModelImpl.Pixel> biFunction)
           throws IllegalArgumentException {
     if (fileName == null) {
       throw new IllegalArgumentException("The File Name must be non-null.");
+    }
+    if (maskName == null) {
+      throw new IllegalArgumentException("The Mask Name must be non-null.");
     }
     if (outPutName == null) {
       throw new IllegalArgumentException("The output name must be non-null");
     }
     this.fileName = fileName;
+    this.maskName = maskName;
     this.outPutName = outPutName;
     this.biFunction = biFunction;
   }

@@ -1,5 +1,17 @@
 # Basic Image Processing
 
+## Additional Features
+1. Allowed for GUI support (new controller new GUI view)
+   1. The controller supports both the GUI view and new scripting
+   2. GUI also supports the representation of an image's histogram
+2. In scripting, applying an image operation with a mask is now supported 
+
+## Refactoring
+1. Changed ImageProcessingMacro method to take the new Model with additional features
+2. Changed the original controller to pass in the updated model
+3. Changed the main method so that a user can specify to use the interactive program with -text 
+   and without command lines arguments the gui is opened
+
 ## New Features
 
 1. Added blur, sharpen, sepia, and greyscale commands that the user can use to change the image

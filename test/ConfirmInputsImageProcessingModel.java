@@ -1,6 +1,7 @@
 import java.util.function.BiFunction;
 
 import imageprocessing.model.FlipType;
+import imageprocessing.model.ImageProcessingExtraFeatures;
 import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.model.ImageProcessingModelImpl;
 
@@ -100,4 +101,5 @@ public class ConfirmInputsImageProcessingModel implements ImageProcessingModel {
     // processing user input
     return 0;
   }
+
 }

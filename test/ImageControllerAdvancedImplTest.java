@@ -4,6 +4,7 @@ import java.io.StringReader;
 
 import imageprocessing.controller.IProcessingImageController;
 import imageprocessing.controller.ImageControllerAdvancedImpl;
+import imageprocessing.model.ImageProcessingExtraFeatures;
 import imageprocessing.model.ImageProcessingModel;
 import imageprocessing.model.ImageProcessingModelImpl;
 import imageprocessing.view.IProcessingImageView;
@@ -112,5 +113,4 @@ public class ImageControllerAdvancedImplTest extends AbstractImageControllerTest
     expectedImage[1][1] = new ImageProcessingModelImpl.Pixel(255, 10, 10);
     assertArrayEquals(expectedImage, model.imageState("test"));
   }
-
 }

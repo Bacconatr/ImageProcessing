@@ -17,6 +17,7 @@ import imageprocessing.controller.macros.AdjustLightMacro;
 import imageprocessing.controller.macros.ComponentMacro;
 import imageprocessing.controller.macros.FlipMacro;
 import imageprocessing.controller.macros.ImageProcessingMacro;
+import imageprocessing.controller.macros.MaskComponentMacro;
 import imageprocessing.model.ImageProcessingModelImpl;
 import imageprocessing.model.componentbifunctions.BlueBiFunction;
 import imageprocessing.model.componentbifunctions.ColorTransformationBiFunction;
@@ -120,6 +121,9 @@ public class ImageControllerImpl implements IProcessingImageController {
     imageProcessingCommands.put("sepia", sc -> new ComponentMacro(sc.next(), sc.next(),
             new ColorTransformationBiFunction(SEPIA_TONE)));
 
+    // ADDITIONAL COMMAND ADDED TO BE SUPPORTED
+    imageProcessingCommands.put("red-component-mask", sc -> new MaskComponentMacro(sc.next(),
+            sc.next(), sc.next(), new RedBiFunction()));
 
   }
 

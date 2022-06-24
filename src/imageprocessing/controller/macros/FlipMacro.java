@@ -1,6 +1,7 @@
 package imageprocessing.controller.macros;
 
 import imageprocessing.model.FlipType;
+import imageprocessing.model.ImageProcessingExtraFeatures;
 import imageprocessing.model.ImageProcessingModel;
 
 /**
@@ -39,4 +40,5 @@ public class FlipMacro implements ImageProcessingMacro {
   public void executeProcessingMacro(ImageProcessingModel model) {
     model.flip(flipType, fileName, outPutName);
   }
+
 }

@@ -184,7 +184,7 @@ public class JFrameViewImpl extends JFrame implements IJFrameView {
   public void updateImage(BufferedImage newImage, int[][] histogram) {
     imageLabel.setIcon(new ImageIcon(newImage));
     imagePanel.remove(histogramPanel);
-    histogramPanel = new Histogram(histogram[0], histogram[1], histogram[2]);
+    histogramPanel = new Histogram(histogram[0], histogram[1], histogram[2], histogram[3][0]);
     imagePanel.add(histogramPanel);
     imagePanel.validate();
   }

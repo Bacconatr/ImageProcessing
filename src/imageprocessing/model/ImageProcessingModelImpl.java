@@ -19,6 +19,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
   // ######### REFACTORED FROM PRIVATE TO PROTECTED SO IT CAN BE INHERITED #############
   protected final HashMap<String, Pixel[][]> mapOfImages;
 
+
   /**
    * Constructs an ImageProcessingModelImpl.
    */
@@ -59,6 +60,64 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
     mapOfImages.put(newImageName, newImage);
   }
 
+  /**
+   * Allows for adjusting the light of an image.
+   *
+   * @param value        the amount of brightness/darkness that will be applied (negative values is
+   *                     equivalent to darkening while positive values brighten the image).
+   * @param imageName    the name of the image to be brightened.
+   * @param newImageName the name of the new image that is produced after the image is brightened.
+   * @throws IllegalArgumentException if the user inputted name of the image they want to change is
+   *                                  not in our list of images
+   */
+  @Override
+  public void adjustLight(int value, String imageName, String newImageName)
+          throws IllegalArgumentException {
+
+    Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
+
+    if (image == null) {
+      throw new IllegalArgumentException("Didn't provide the name of an existing image.");
+    }
+
+    for (int i = 0; i < image.length; i++) {
+      for (int j = 0; j < image[0].length; j++) {
+        Pixel currentPixel = image[i][j];
+        int tempRed = currentPixel.getRed() + value;
+        if (tempRed >= 255) {
+          tempRed = 255;
+        } else if (tempRed <= 0) {
+          tempRed = 0;
+        }
+        int tempGreen = currentPixel.getGreen() + value;
+        if (tempGreen >= 255) {
+          tempGreen = 255;
+        } else if (tempGreen <= 0) {
+          tempGreen = 0;
+        }
+
+        int tempBlue = currentPixel.getBlue() + value;
+        if (tempBlue >= 255) {
+          tempBlue = 255;
+        } else if (tempBlue <= 0) {
+          tempBlue = 0;
+        }
+
+        image[i][j] = new Pixel(tempRed, tempGreen, tempBlue);
+      }
+    }
+    this.mapOfImages.put(newImageName, image);
+
+  }
+
+  /**
+   * Method to flip an image.
+   *
+   * @param flip         the type of flipping that will be performed (currently horizontal or
+   *                     vertical)
+   * @param imageName    the name of the image to be flipped.
+   * @param newImageName the name of the new image once the flipping has been performed.
+   */
   @Override
   public void flip(FlipType flip, String imageName, String newImageName) {
     Pixel[][] image = imageDeepCopy(mapOfImages.getOrDefault(imageName, null));
@@ -284,7 +343,7 @@ public class ImageProcessingModelImpl implements ImageProcessingModel {
   }
 
   // creates a deep copy of an image. If the image provided is null return null.
-  private Pixel[][] imageDeepCopy(Pixel[][] image) {
+  protected Pixel[][] imageDeepCopy(Pixel[][] image) {
     if (image == null) {
       return null;
     }
